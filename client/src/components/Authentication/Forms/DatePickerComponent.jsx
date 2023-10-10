@@ -19,6 +19,7 @@ const DatePickerComponent = () => {
         placeholderText="Select a date"
         className="w-80 focus:outline-none focus:border-2 border-slate-500 text-lg font-serif "
       />
+
       {selectedDate && (
         <p>Selected date: {selectedDate.toLocaleDateString()}</p>
       )}

@@ -1,14 +1,27 @@
 import { Link } from "react-router-dom";
 import Hero from "../../assets/network-illustration.svg";
 import InputField from "./Forms/InputField";
-import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const LoginComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [disabled, setDisabled] = useState(true);
-
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Name is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+    onSubmit: (values) => {
+      // Handle form submission here
+      console.log("Form values:", values);
+    },
+  });
   return (
     <>
       <section className="text-gray-600 body-font">
@@ -24,24 +37,42 @@ const LoginComponent = () => {
             <h1 className=" sm:text-4xl text-3xl mb-4 font-medium text-gray-900 ">
               Login
             </h1>
-            <form className="sm:flex sm:flex-col">
+            <form
+              className="sm:flex sm:flex-col"
+              onSubmit={formik.handleSubmit}
+            >
               <InputField
                 type="email"
                 name="email"
                 id="email"
                 label="Email Address"
                 placeholder="Enter your Email Address"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                errorObj={formik.touched.email && formik.errors.email}
               />
+              {formik.touched.email && formik.errors.email ? (
+                <div className="error text-red-500">!{formik.errors.email}</div>
+              ) : null}
               <InputField
                 type="password"
                 name="password"
                 id="password"
                 label="Password"
                 placeholder="Enter your Password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                errorObj={formik.touched.password && formik.errors.password}
               />
+              {formik.touched.password && formik.errors.password ? (
+                <div className="error text-red-500">
+                  !{formik.errors.password}
+                </div>
+              ) : null}
               <button
                 type="submit"
-                disabled={disabled}
                 className="rounded-md py-2 px-4 bg-slate-700 text-white cursor-pointer disabled:opacity-70"
               >
                 Submit
