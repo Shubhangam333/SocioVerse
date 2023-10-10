@@ -11,7 +11,7 @@ const InputField = ({ type, name, id, label, placeholder }) => {
         name={name}
         id={id}
         placeholder={placeholder}
-        className="py-2 px-4 w-80 self-stretch  focus:outline-none border-2 border-slate-500 text-lg "
+        className="py-2 px-4 w-80 self-stretch  focus:outline-none focus:border-2 border-slate-500 text-lg "
       />
     </div>
   );

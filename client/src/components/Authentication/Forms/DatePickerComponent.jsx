@@ -17,7 +17,7 @@ const DatePickerComponent = () => {
         onChange={handleDateChange}
         dateFormat="dd/MM/yyyy" // You can customize the date format
         placeholderText="Select a date"
-        className="w-80 focus:outline-none border-2 border-slate-500 text-lg font-serif "
+        className="w-80 focus:outline-none focus:border-2 border-slate-500 text-lg font-serif "
       />
       {selectedDate && (
         <p>Selected date: {selectedDate.toLocaleDateString()}</p>

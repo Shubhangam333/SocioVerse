@@ -14,7 +14,7 @@ const RegisterComponent = () => {
   return (
     <>
       <section className="text-gray-600 body-font ">
-        <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+        <div className="container mx-auto flex px-5 py-6 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0 ">
             <img
               className="object-cover object-center rounded"
@@ -53,7 +53,7 @@ const RegisterComponent = () => {
                 name="confirmpassword"
                 id="confirmpassword"
                 label="Confirm Password"
-                placeholder="Comfirm your Password"
+                placeholder="Confirm your Password"
               />
               <div className="flex justify-between">
                 <RadioButtonField
