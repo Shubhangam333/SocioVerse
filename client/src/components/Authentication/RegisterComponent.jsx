@@ -1,20 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Hero from "../../assets/network-illustration.svg";
 import InputField from "./Forms/InputField";
 import RadioButtonField from "./Forms/RadioButtonField";
 import DatePickerComponent from "./Forms/DatePickerComponent";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+import Loader from "../Loader/Loader";
+import { useRegisterMutation } from "../../features/auth/authapi";
 
 const RegisterComponent = () => {
+  const [register, { isLoading }] = useRegisterMutation();
+  const navigate = useNavigate();
+
+  const submitHandler = async (values) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("gender", values.gender);
+    formData.append("dob", values.dob);
+    formData.append("avatar", values.avatar);
+
+    try {
+      const res = await register(formData).unwrap();
+      toast.success(res.message);
+      navigate("/");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       password: "",
-      dob: "",
+      dob: new Date(),
       gender: "",
-      file: null,
+      avatar: null,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
@@ -22,24 +45,23 @@ const RegisterComponent = () => {
         .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string().required("Password is required"),
-      date: Yup.string().required("DOB is required"),
+      dob: Yup.date().required("DOB is required"),
       gender: Yup.string().required("Gender is required"),
-      file: Yup.mixed()
+      avatar: Yup.mixed()
         .required("File is required")
         .test("fileSize", "File size is too large", (value) => {
-          if (!value) return true; // No file selected
-          const maxSize = 1024 * 1024; // 1 MB (adjust as needed)
+          if (!value) return true;
+          const maxSize = 1024 * 1024;
           return value.size <= maxSize;
         })
         .test("fileType", "Invalid file type", (value) => {
-          if (!value) return true; // No file selected
-          const allowedTypes = ["image/jpeg", "image/png", "image/jpg"]; // Allowed file types
+          if (!value) return true;
+          const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
           return allowedTypes.includes(value.type);
         }),
     }),
     onSubmit: (values) => {
-      // Handle form submission here
-      console.log("Form values:", values);
+      submitHandler(values);
     },
   });
   return (
@@ -60,6 +82,7 @@ const RegisterComponent = () => {
             <form
               className="sm:flex sm:flex-col"
               onSubmit={formik.handleSubmit}
+              encType="multipart/form-data"
             >
               <InputField
                 type="text"
@@ -70,7 +93,9 @@ const RegisterComponent = () => {
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                errorObj={formik.touched.name && formik.errors.name}
+                errorObj={
+                  formik.touched.name && formik.errors.name ? true : false
+                }
               />
 
               {formik.touched.name && formik.errors.name ? (
@@ -112,18 +137,18 @@ const RegisterComponent = () => {
               <InputField
                 type="file"
                 id="file"
-                name="file"
+                name="avatar"
                 label="Profile picture"
                 onChange={(event) => {
-                  formik.setFieldValue("file", event.currentTarget.files[0]);
+                  formik.setFieldValue("avatar", event.currentTarget.files[0]);
                 }}
-                errorObj={formik.touched.file && formik.errors.file}
+                errorObj={
+                  formik.touched.avatar && formik.errors.avatar ? true : false
+                }
                 placeholder="Enter your Picture"
-                value=""
-                onBlur={null}
               />
-              {formik.touched.file && formik.errors.file ? (
-                <div className="error text-red-500">{formik.errors.file}</div>
+              {formik.touched.avatar && formik.errors.avatar ? (
+                <div className="error text-red-500">{formik.errors.avatar}</div>
               ) : null}
 
               <div className="flex justify-between">
@@ -155,20 +180,21 @@ const RegisterComponent = () => {
               {formik.touched.gender && formik.errors.gender ? (
                 <div className="error text-red-500">{formik.errors.gender}</div>
               ) : null}
-              <DatePickerComponent />
+              <DatePickerComponent dob={formik.values.dob} />
               <button
                 type="submit"
-                className="rounded-md py-2 px-4 bg-slate-700 text-white cursor-pointer disabled:opacity-70"
+                className="rounded-md py-2 px-4 bg-slate-700 text-white cursor-pointer disabled:opacity-70 hover:scale-95"
               >
                 Submit
               </button>
-              <div className="flex justify-between mt-2">
-                <span>Already have an account? </span>
-                <Link to="/" className="text-red-400 ">
-                  Login
-                </Link>
-              </div>
+              {isLoading && <Loader />}
             </form>
+            <div className="flex justify-between mt-2 gap-24">
+              <span>Already have an account? </span>
+              <Link to="/" className="text-red-400 ">
+                Login
+              </Link>
+            </div>
           </div>
         </div>
       </section>

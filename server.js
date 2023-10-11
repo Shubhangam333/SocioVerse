@@ -8,6 +8,8 @@ import userRoutes from "./routes/user.js";
 import morgan from "morgan";
 import cloudinary from "cloudinary";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import { upload } from "./config/imageupload.js";
 
 const app = express();
 
@@ -27,8 +29,9 @@ cloudinary.config({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ credentials: true }));
 
-app.use("/api/v1", userRoutes);
+app.use("/api/v1", upload.single("avatar"), userRoutes);
 
 app.use(errorMiddleware);
 

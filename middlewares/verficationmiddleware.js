@@ -8,7 +8,7 @@ const courier = CourierClient({
 });
 
 export const sendVerificationEmail = async (user) => {
-  const link = `http://127.0.0.1:5000/api/v1/register/verify/${user.verificationToken}`;
+  const link = `http://127.0.0.1:3000/verify/${user.verificationToken}`;
   const { requestId } = await courier.send({
     message: {
       content: {

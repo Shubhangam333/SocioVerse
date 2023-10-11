@@ -1,25 +1,47 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Hero from "../../assets/network-illustration.svg";
 import InputField from "./Forms/InputField";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useLoginMutation } from "../../features/auth/authapi";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../features/auth/authSlice";
+import Loader from "../Loader/Loader";
 
 const LoginComponent = () => {
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const submitHandler = async (values) => {
+    const formData = new FormData();
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+
+    try {
+      const res = await login(formData).unwrap();
+      dispatch(setCredentials({ ...res }));
+      toast.success("Login Successful");
+      navigate("/home");
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Name is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: (values) => {
-      // Handle form submission here
-      console.log("Form values:", values);
+      submitHandler(values);
     },
   });
   return (
@@ -83,6 +105,7 @@ const LoginComponent = () => {
                   Register
                 </Link>
               </div>
+              {isLoading && <Loader />}
             </form>
           </div>
         </div>

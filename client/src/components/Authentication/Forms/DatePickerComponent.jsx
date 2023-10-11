@@ -1,8 +1,9 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import PropTypes from "prop-types";
 
-const DatePickerComponent = () => {
+const DatePickerComponent = ({ dob }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateChange = (date) => {
@@ -17,6 +18,7 @@ const DatePickerComponent = () => {
         onChange={handleDateChange}
         dateFormat="dd/MM/yyyy" // You can customize the date format
         placeholderText="Select a date"
+        dob={selectedDate}
         className="w-80 focus:outline-none focus:border-2 border-slate-500 text-lg font-serif "
       />
 
@@ -25,6 +27,10 @@ const DatePickerComponent = () => {
       )}
     </div>
   );
+};
+
+DatePickerComponent.propTypes = {
+  dob: PropTypes.instanceOf(Date),
 };
 
 export default DatePickerComponent;

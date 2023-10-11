@@ -24,7 +24,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`py-1 px-4 w-80 self-stretch  focus:outline-none border-2 border-slate-500 text-lg ${
+        className={`py-1 px-4 w-80  focus:outline-none border-2 focus:border-slate-500 text-lg ${
           errorObj ? "border-red-500 " : null
         }`}
       />
@@ -38,10 +38,16 @@ InputField.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   errorObj: PropTypes.bool.isRequired,
+};
+
+InputField.defaultProps = {
+  errorObj: false,
+  onBlur: () => {
+    console.log("blur");
+  },
 };
 
 export default InputField;

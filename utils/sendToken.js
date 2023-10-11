@@ -3,7 +3,7 @@ import { createAccessToken, createRefreshToken } from "./tokenUtils.js";
 
 export const sendToken = (user, res) => {
   const refreshToken = createRefreshToken(user);
-  const accessToken = createAccessToken(user);
+  const access_token = createAccessToken(user);
 
   // options for cookie
   const options = {
@@ -18,7 +18,7 @@ export const sendToken = (user, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json({
       success: true,
-      accessToken,
+      access_token,
       user,
     });
 };

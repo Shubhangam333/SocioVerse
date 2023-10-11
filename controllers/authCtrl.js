@@ -57,14 +57,16 @@ export const verifyToken = async (req, res, next) => {
   const user = await User.findOne({ verificationToken: token });
 
   if (!user) {
-    return res.status(StatusCodes).send("User not found.");
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "User does not exist" });
   }
 
   user.isVerified = true;
   user.verificationToken = undefined;
   await user.save();
 
-  res.status(StatusCodes.OK).send("Email verified successfully.");
+  res.status(StatusCodes.OK).json({ message: "Email verified successfully." });
 };
 
 export const login = async (req, res, next) => {
@@ -88,26 +90,30 @@ export const login = async (req, res, next) => {
   sendToken(user, res);
 };
 
-export const generateAccessToken = async (req, res) => {
+export const logout = async (req, res, next) => {
+  const options = {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  };
+  res.status(StatusCodes.OK).cookie("refreshToken", null, options).json({
+    success: true,
+    message: "Logout Successfuly",
+  });
+};
+
+export const generateAccessToken = async (req, res, next) => {
   const rf_token = req.cookies.refreshToken;
-  if (!rf_token)
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ msg: "Please login now." });
+  if (!rf_token) throw new UnauthorizedError("Please Login Now");
 
   jwt.verify(
     rf_token,
     process.env.REFRESH_TOKEN_SECRET,
     async (err, result) => {
-      if (err)
-        return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .json({ msg: "Please login now." });
+      if (err) throw new UnauthorizedError("Please Login Now");
 
       const user = await User.findById(result.id).select("-password");
 
-      if (!user)
-        return res.status(400).json({ msg: "This User does not exist." });
+      if (!user) throw new UnauthorizedError("User does not exist");
 
       const access_token = createAccessToken({ id: result.id });
 
