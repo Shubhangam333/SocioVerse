@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import EmailVerify from "./pages/EmailVerify";
 import PrivateRoute from "./ProtectRoutes/PrivateRoute";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 // const router = createBrowserRouter([
 //   {
@@ -37,9 +38,11 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify/:token" element={<EmailVerify />} />
-        <Route path="/home" element={<PrivateRoute />}>
+        {/* <Route path="/home" element={<PrivateRoute />}>
           <Route path="" element={<Home />} />
-        </Route>
+          <Route path="profile" element={<Profile />} />
+        </Route> */}
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

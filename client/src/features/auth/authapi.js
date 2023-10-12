@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authapi = createApi({
+  reducerPath: "authapi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   endpoints: (builder) => ({
     register: builder.mutation({
@@ -12,7 +13,7 @@ export const authapi = createApi({
     }),
     emailVerification: builder.query({
       query: (verificationToken) => ({
-        url: `/verify/${verificationToken}`, // Use template literal to insert the token into the URL
+        url: `/verify/${verificationToken}`,
         method: "GET",
       }),
     }),
@@ -22,9 +23,6 @@ export const authapi = createApi({
         method: "POST",
         body: credentials,
       }),
-    }),
-    accessToken: builder.query({
-      query: () => "/access_token",
     }),
     logout: builder.mutation({
       query: () => ({
@@ -40,5 +38,4 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useEmailVerificationQuery,
-  useAccessTokenQuery,
 } = authapi;

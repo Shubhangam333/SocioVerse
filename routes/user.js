@@ -18,6 +18,6 @@ router.route("/login").post(login);
 router.route("/logout").get(logout);
 router.route("/access_token").get(generateAccessToken);
 
-router.route("/user/profile", isAuthenticated, profile);
+router.route("/user/profile").get(isAuthenticated, profile);
 
 export default router;

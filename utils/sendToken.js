@@ -2,8 +2,8 @@ import { StatusCodes } from "http-status-codes";
 import { createAccessToken, createRefreshToken } from "./tokenUtils.js";
 
 export const sendToken = (user, res) => {
-  const refreshToken = createRefreshToken(user);
-  const access_token = createAccessToken(user);
+  const refreshToken = createRefreshToken({ id: user._id });
+  const access_token = createAccessToken({ id: user._id });
 
   // options for cookie
   const options = {

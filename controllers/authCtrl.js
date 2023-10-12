@@ -105,22 +105,19 @@ export const generateAccessToken = async (req, res, next) => {
   const rf_token = req.cookies.refreshToken;
   if (!rf_token) throw new UnauthorizedError("Please Login Now");
 
-  jwt.verify(
-    rf_token,
-    process.env.REFRESH_TOKEN_SECRET,
-    async (err, result) => {
-      if (err) throw new UnauthorizedError("Please Login Now");
+  const result = jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET);
 
-      const user = await User.findById(result.id).select("-password");
+  if (!result) throw new UnauthorizedError("Please Login Now");
+  const user = await User.findById(result.id).select("-password");
 
-      if (!user) throw new UnauthorizedError("User does not exist");
+  if (!user) throw new UnauthorizedError("User does not exist");
 
-      const access_token = createAccessToken({ id: result.id });
+  const access_token = createAccessToken({ id: result.id });
 
-      res.status(StatusCodes.OK).json({
-        access_token,
-        user,
-      });
-    }
-  );
+  console.log("access_token", access_token);
+
+  res.status(StatusCodes.OK).json({
+    access_token,
+    user,
+  });
 };
