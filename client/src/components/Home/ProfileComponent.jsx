@@ -1,15 +1,13 @@
-import { useProfileQuery } from "../../features/profile/profileapi";
+import Gallery from "./Profile/Gallery/Gallery";
+import ProfileHeader from "./Profile/ProfileHeader";
+import ProfileInfo from "./Profile/ProfileInfo";
 
 const ProfileComponent = () => {
-  const { data, isLoading, error } = useProfileQuery();
-
-  console.log("isLoading", isLoading);
-
-  console.log(error, data);
-
   return (
-    <div>
-      {isLoading ? <p>Loading...</p> : <div>ProfileComponent data here</div>}
+    <div className="main m-auto">
+      <ProfileHeader />
+      <ProfileInfo />
+      <Gallery />
     </div>
   );
 };

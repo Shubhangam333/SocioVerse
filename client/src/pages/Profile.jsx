@@ -1,7 +1,11 @@
 import ProfileComponent from "../components/Home/ProfileComponent";
 
 const Profile = () => {
-  return <ProfileComponent />;
+  return (
+    <>
+      <ProfileComponent />
+    </>
+  );
 };
 
 export default Profile;

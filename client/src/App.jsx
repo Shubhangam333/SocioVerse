@@ -38,11 +38,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify/:token" element={<EmailVerify />} />
-        {/* <Route path="/home" element={<PrivateRoute />}>
-          <Route path="" element={<Home />} />
+        <Route path="" element={<PrivateRoute />}>
+          <Route path="/home" element={<Home />} />
           <Route path="profile" element={<Profile />} />
-        </Route> */}
-        <Route path="/home" element={<Home />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

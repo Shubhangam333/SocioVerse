@@ -1,10 +1,32 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useProfileQuery } from "../features/profile/profileapi";
+import Loader from "../components/Loader/Loader";
+import { useEffect } from "react";
+import Header from "../components/Home/Header/Header";
 
 const PrivateRoute = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+  const { data, isLoading, error } = useProfileQuery();
 
-  return userInfo ? <Outlet /> : <Navigate to="/" replace />;
+  useEffect(() => {
+    if (error) {
+      Navigate("/");
+    }
+  }, [error]);
+
+  return (
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : data ? (
+        <>
+          <Header />
+          <Outlet />
+        </>
+      ) : (
+        <Navigate to="/" replace />
+      )}
+    </>
+  );
 };
 
 export default PrivateRoute;
