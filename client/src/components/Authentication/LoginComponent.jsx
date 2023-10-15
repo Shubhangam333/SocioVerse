@@ -15,12 +15,11 @@ const LoginComponent = () => {
   const dispatch = useDispatch();
 
   const submitHandler = async (values) => {
-    const formData = new FormData();
-    formData.append("email", values.email);
-    formData.append("password", values.password);
-
     try {
-      const res = await login(formData).unwrap();
+      const res = await login({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
       dispatch(setCredentials({ ...res }));
       toast.success("Login Successful");
       navigate("/home");

@@ -6,7 +6,7 @@ import { postupload } from "../config/imageupload.js";
 const router = express.Router();
 
 router
-  .route("/createPost")
+  .route("/createpost")
   .post(isAuthenticated, postupload.array("postimage"), createPost);
 router.route("/posts").get(isAuthenticated, getPosts);
 

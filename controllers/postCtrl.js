@@ -28,6 +28,10 @@ export const createPost = async (req, res, next) => {
     images: imagesLinks,
     user: req.user._id,
   });
+
+  if (!post) {
+    throw new BadRequestError("Post creation unsuccessfull ");
+  }
   res.status(StatusCodes.CREATED).json({ success: true, post });
 };
 

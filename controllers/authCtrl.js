@@ -115,8 +115,6 @@ export const generateAccessToken = async (req, res, next) => {
 
   const access_token = createAccessToken({ id: result.id });
 
-  console.log("access_token", access_token);
-
   res.status(StatusCodes.OK).json({
     access_token,
     user,

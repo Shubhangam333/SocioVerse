@@ -2,12 +2,17 @@ import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsImages } from "react-icons/bs";
 import PropTypes from "prop-types";
+import { useCreatePostMutation } from "../../../features/posts/postapi";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreatePostModal = ({ isOpen, onClose }) => {
   const [postContent, setPostContent] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  const [createpost, { isLoading }] = useCreatePostMutation();
+  const navigate = useNavigate();
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
 
@@ -39,9 +44,29 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     });
   };
 
-  const handlePost = () => {
+  const handlePost = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("content", postContent);
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append("postimage", selectedImages[i]);
+    }
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    try {
+      const res = await createpost(formData).unwrap();
+      toast.success("Post created");
+      console.log("res", res);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+      console.log(err);
+    }
     onClose();
   };
+
+  // const handleSubmit = (e) => {};
 
   return (
     <div
@@ -93,11 +118,13 @@ const CreatePostModal = ({ isOpen, onClose }) => {
               type="file"
               accept="image/*"
               id="fileInput"
+              name="postimage"
               multiple
               onChange={handleImageUpload}
-              className="hidden "
+              className="hidden"
             />
           </div>
+
           <div className="modal-actions mt-4">
             <button
               className="px-4 py-2  text-white bg-blue-500 rounded-md w-full"
@@ -116,5 +143,5 @@ export default CreatePostModal;
 
 CreatePostModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
