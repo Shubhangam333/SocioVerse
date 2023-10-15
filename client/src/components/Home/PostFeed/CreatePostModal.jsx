@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsImages } from "react-icons/bs";
+import PropTypes from "prop-types";
 
 const CreatePostModal = ({ isOpen, onClose }) => {
   const [postContent, setPostContent] = useState("");
@@ -10,11 +11,9 @@ const CreatePostModal = ({ isOpen, onClose }) => {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
 
-    // Iterate through the selected files
     files.forEach((file) => {
       setSelectedImages((prevSelectedImages) => [...prevSelectedImages, file]);
 
-      // Create a URL for the selected image to show a preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreviews((prevImagePreviews) => [
@@ -41,8 +40,6 @@ const CreatePostModal = ({ isOpen, onClose }) => {
   };
 
   const handlePost = () => {
-    // Handle posting the content and images (selectedImages)
-    // You may want to implement image upload to a server here.
     onClose();
   };
 
@@ -89,8 +86,8 @@ const CreatePostModal = ({ isOpen, onClose }) => {
                 ))}
               </div>
             )}
-            <label htmlFor="fileInput">
-              <BsImages className="text-3xl m-auto" />
+            <label htmlFor="fileInput" className=" ">
+              <BsImages className="text-3xl m-auto cursor-pointer" />
             </label>
             <input
               type="file"
@@ -98,7 +95,7 @@ const CreatePostModal = ({ isOpen, onClose }) => {
               id="fileInput"
               multiple
               onChange={handleImageUpload}
-              className="hidden"
+              className="hidden "
             />
           </div>
           <div className="modal-actions mt-4">
@@ -116,3 +113,8 @@ const CreatePostModal = ({ isOpen, onClose }) => {
 };
 
 export default CreatePostModal;
+
+CreatePostModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.bool.isRequired,
+};

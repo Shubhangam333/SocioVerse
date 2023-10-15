@@ -10,4 +10,14 @@ const storage = new CloudinaryStorage({
   },
 });
 
+const Poststorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "socioverse_posts", // Optional: Specify a folder in Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
+});
+
+export const postupload = multer({ storage: Poststorage });
+
 export const upload = multer({ storage: storage });

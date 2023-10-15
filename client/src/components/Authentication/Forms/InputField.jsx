@@ -45,9 +45,7 @@ InputField.propTypes = {
 
 InputField.defaultProps = {
   errorObj: false,
-  onBlur: () => {
-    console.log("blur");
-  },
+  onBlur: () => {},
 };
 
 export default InputField;

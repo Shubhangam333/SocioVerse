@@ -4,12 +4,15 @@ dotenv.config();
 import { connectDB } from "./config/db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import "express-async-errors";
+
+//routes
 import userRoutes from "./routes/user.js";
+import postRoutes from "./routes/post.js";
+
 import morgan from "morgan";
 import cloudinary from "cloudinary";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { upload } from "./config/imageupload.js";
 
 const app = express();
 
@@ -32,7 +35,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({ credentials: true }));
 
-app.use("/api/v1", upload.single("avatar"), userRoutes);
+app.use("/api/v1", userRoutes);
+app.use("/api/v1", postRoutes);
 
 app.use(errorMiddleware);
 

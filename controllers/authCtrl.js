@@ -71,6 +71,7 @@ export const verifyToken = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   if (!email || !password) {
     throw new BadRequestError("Please provide valid email and password");
