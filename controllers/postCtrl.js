@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError } from "../errors/customErrors.js";
+import { BadRequestError, NotFoundError } from "../errors/customErrors.js";
 import { Post } from "../models/post.js";
+import { APIfeatures } from "../apifeatures/apiFeature.js";
 
 export const createPost = async (req, res, next) => {
   const { content } = req.body;
@@ -40,3 +41,59 @@ export const getPosts = async (req, res, next) => {
 
   res.status(StatusCodes.OK).json({ success: true, posts });
 };
+
+export const likePost = async (req, res, next) => {
+  const post = await Post.find({
+    _id: req.params.id,
+    likes: req.user._id,
+  });
+  if (post.length > 0)
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "You liked this post already." });
+
+  const like = await Post.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $push: { likes: req.user._id },
+    },
+    { new: true }
+  );
+
+  if (!like)
+    throw new BadRequestError("There was an error while updating the like");
+
+  res.status(StatusCodes.OK).json({ msg: "User Liked this Post" });
+};
+export const unlikePost = async (req, res, next) => {
+  const like = await Post.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $pull: { likes: req.user._id },
+    },
+    { new: true }
+  );
+
+  if (!like)
+    throw new BadRequestError("There was an error while updating the like");
+
+  res.status(StatusCodes.OK).json({ msg: "User UnLiked this Post" });
+};
+export const getUserPosts = async (req, res, next) => {
+  const features = new APIfeatures(
+    Post.find({ user: req.params.id }),
+    req.query
+  ).paginating();
+
+  const userposts = await features.query.sort("-createdAt");
+  if (!userposts) {
+    throw new NotFoundError("Posts Not found");
+  }
+
+  res.status(StatusCodes.OK).json({
+    userposts,
+  });
+};
+export const savePost = async (req, res, next) => {};
+export const unSavePost = async (req, res, next) => {};
+export const getSavePosts = async (req, res, next) => {};
