@@ -25,7 +25,7 @@ const LoginComponent = () => {
       navigate("/home");
     } catch (err) {
       console.log(err);
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.error || err.data.msg);
     }
   };
   const formik = useFormik({

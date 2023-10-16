@@ -21,7 +21,31 @@ export const postapi = createApi({
       }),
       providesTags: ["Posts"],
     }),
+    getUserPosts: builder.mutation({
+      query: (id) => ({
+        url: `/user_posts/${id}`,
+        method: "GET",
+      }),
+    }),
+    likePost: builder.mutation({
+      query: (id) => ({
+        url: `/post/${id}/like`,
+        method: "PUT",
+      }),
+    }),
+    unLikePost: builder.mutation({
+      query: (id) => ({
+        url: `/post/${id}/unlike`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useCreatePostMutation, useGetPostsQuery } = postapi;
+export const {
+  useCreatePostMutation,
+  useGetPostsQuery,
+  useLikePostMutation,
+  useGetUserPostsMutation,
+  useUnLikePostMutation,
+} = postapi;
