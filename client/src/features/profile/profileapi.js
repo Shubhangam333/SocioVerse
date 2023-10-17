@@ -12,7 +12,37 @@ export const profileapi = createApi({
         method: "GET",
       }),
     }),
+    userSuggestion: builder.query({
+      query: () => ({
+        url: "suggestionsUser",
+        method: "GET",
+      }),
+    }),
+    getUserInfo: builder.mutation({
+      query: (id) => ({
+        url: `/user/${id}`,
+        method: "GET",
+      }),
+    }),
+    follow: builder.mutation({
+      query: (id) => ({
+        url: `/user/${id}/follow`,
+        method: "PUT",
+      }),
+    }),
+    unFollow: builder.mutation({
+      query: (id) => ({
+        url: `/user/${id}/unfollow`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useProfileQuery } = profileapi;
+export const {
+  useProfileQuery,
+  useUserSuggestionQuery,
+  useGetUserInfoMutation,
+  useFollowMutation,
+  useUnFollowMutation,
+} = profileapi;

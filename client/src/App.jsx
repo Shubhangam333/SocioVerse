@@ -40,7 +40,7 @@ function App() {
         <Route path="/verify/:token" element={<EmailVerify />} />
         <Route path="" element={<PrivateRoute />}>
           <Route path="/home" element={<Home />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

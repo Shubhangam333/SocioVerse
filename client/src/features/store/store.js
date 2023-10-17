@@ -3,6 +3,7 @@ import { authapi } from "../auth/authapi";
 import authReducer from "../auth/authSlice.js";
 import { profileapi } from "../profile/profileapi";
 import { postapi } from "../posts/postapi";
+import profileReducer from "../profile/profileSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     [profileapi.reducerPath]: profileapi.reducer,
     [postapi.reducerPath]: postapi.reducer,
     auth: authReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

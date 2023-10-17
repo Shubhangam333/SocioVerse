@@ -27,7 +27,7 @@ const Header = () => {
         <button className="text-2xl">
           <BiMessageAltDetail />
         </button>
-        <Link to="/profile" className="cursor-pointer">
+        <Link to={`/profile/${userInfo._id}`} className="cursor-pointer">
           <img
             src={userInfo.avatar.url}
             alt="avatar"

@@ -4,19 +4,19 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loader from "../../../Loader/Loader";
 
-const Gallery = () => {
-  const [userPosts, { isLoading }] = useGetUserPostsMutation();
-  const { userInfo } = useSelector((state) => state.auth);
+const Gallery = ({ user }) => {
+  const [userPosts, { data, isSuccess, isLoading }] = useGetUserPostsMutation();
+
   const [userPost, setUserPost] = useState([]);
 
   const getUserPosts = useCallback(async () => {
     try {
-      const res = await userPosts(userInfo._id).unwrap();
+      const res = await userPosts(user._id).unwrap();
       setUserPost(res.userposts);
     } catch (err) {
       // toast.error(err?.data?.message || err.error);
     }
-  }, [userInfo._id, userPosts]);
+  }, [user._id, userPosts]);
 
   useEffect(() => {
     getUserPosts();
@@ -25,8 +25,8 @@ const Gallery = () => {
   return (
     <div className="grid grid-cols-3 gap-2 my-8 ">
       {isLoading && <Loader />}
-      {userPost.length > 0 &&
-        userPost.map((post) =>
+      {isSuccess &&
+        data.userposts.map((post) =>
           post.images.length > 0 ? (
             <div className="w-full h-48">
               <img

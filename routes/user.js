@@ -6,7 +6,13 @@ import {
   verifyToken,
   logout,
 } from "../controllers/authCtrl.js";
-import { profile } from "../controllers/userCtrl.js";
+import {
+  profile,
+  follow,
+  unfollow,
+  suggestionsUser,
+  getUser,
+} from "../controllers/userCtrl.js";
 import { isAuthenticated } from "../middlewares/authMiddleware.js";
 import { upload } from "../config/imageupload.js";
 
@@ -19,5 +25,11 @@ router.route("/logout").get(logout);
 router.route("/access_token").get(generateAccessToken);
 
 router.route("/user/profile").get(isAuthenticated, profile);
+router.route("/user/:id").get(isAuthenticated, getUser);
+
+router.route("/user/:id/follow").put(isAuthenticated, follow);
+router.route("/user/:id/unfollow").put(isAuthenticated, unfollow);
+
+router.route("/suggestionsUser").get(isAuthenticated, suggestionsUser);
 
 export default router;

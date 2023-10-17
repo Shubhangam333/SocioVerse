@@ -77,7 +77,12 @@ export const login = async (req, res, next) => {
     throw new BadRequestError("Please provide valid email and password");
   }
 
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email })
+    .select("+password")
+    .populate(
+      "followers following",
+      "avatar username fullname followers following"
+    );
 
   const passwordMatched = await user.comparePassword(password);
 

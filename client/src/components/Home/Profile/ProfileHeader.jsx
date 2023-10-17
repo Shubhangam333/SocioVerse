@@ -1,9 +1,9 @@
 import ImageHeader from "./ImageHeader";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ user }) => {
   return (
     <div className="mt-24 m-auto">
-      <ImageHeader />
+      <ImageHeader userInfo={user} />
     </div>
   );
 };

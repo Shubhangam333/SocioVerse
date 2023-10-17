@@ -1,13 +1,15 @@
+import { useSelector } from "react-redux";
 import Gallery from "./Profile/Gallery/Gallery";
 import ProfileHeader from "./Profile/ProfileHeader";
 import ProfileInfo from "./Profile/ProfileInfo";
 
-const ProfileComponent = () => {
+const ProfileComponent = ({ user }) => {
+  console.log(user);
   return (
     <div className="main m-auto">
-      <ProfileHeader />
-      <ProfileInfo />
-      <Gallery />
+      <ProfileHeader user={user} />
+      <ProfileInfo user={user} />
+      <Gallery user={user} />
     </div>
   );
 };
