@@ -14,7 +14,21 @@ import cloudinary from "cloudinary";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import { Server } from "socket.io";
+import http from "http";
+import { SocketServer } from "./socketServer.js";
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  SocketServer(socket);
+});
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -40,6 +54,6 @@ app.use("/api/v1", postRoutes);
 
 app.use(errorMiddleware);
 
-app.listen(port, (req, res) => {
+server.listen(port, (req, res) => {
   console.log(`Server started on PORT: ${port}`);
 });

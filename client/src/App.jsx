@@ -5,6 +5,8 @@ import EmailVerify from "./pages/EmailVerify";
 import PrivateRoute from "./ProtectRoutes/PrivateRoute";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import io from "socket.io-client";
+import SocketClient from "./SocketClient";
 
 // const router = createBrowserRouter([
 //   {
@@ -43,6 +45,7 @@ function App() {
           <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
+      <SocketClient />
     </BrowserRouter>
   );
 }
