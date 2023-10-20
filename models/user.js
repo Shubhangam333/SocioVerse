@@ -36,14 +36,19 @@ const userSchema = new mongoose.Schema({
     default: "",
     maxlength: 200,
   },
-  followers: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-  },
-  following: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-  },
+  followers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
+    },
+  ],
+  saved: [{ type: mongoose.Types.ObjectId, ref: "user" }],
   website: { type: String, default: "" },
   avatar: {
     public_id: {
@@ -87,4 +92,4 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model("user", userSchema);

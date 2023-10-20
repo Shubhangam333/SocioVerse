@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/customErrors.js";
 import { Post } from "../models/post.js";
 import { APIfeatures } from "../apifeatures/apiFeature.js";
+import { User } from "../models/user.js";
 
 export const createPost = async (req, res, next) => {
   const { content } = req.body;
@@ -36,8 +37,29 @@ export const createPost = async (req, res, next) => {
   res.status(StatusCodes.CREATED).json({ success: true, post });
 };
 
+export const getPostById = async (req, res, next) => {
+  const id = req.params.id;
+
+  const post = await Post.findById(id);
+
+  if (!post) {
+    throw new NotFoundError("Post not found");
+  }
+
+  res.status(StatusCodes.OK).json({ post });
+};
+
 export const getPosts = async (req, res, next) => {
-  const posts = await Post.find({});
+  const features = new APIfeatures(
+    Post.find({
+      user: [...req.user.following, req.user._id],
+    }),
+    req.query
+  ).paginating();
+
+  const posts = await features.query
+    .sort("-createdAt")
+    .populate("user likes", "avatar name followers");
 
   res.status(StatusCodes.OK).json({ success: true, posts });
 };

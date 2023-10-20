@@ -71,7 +71,6 @@ export const verifyToken = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
 
   if (!email || !password) {
     throw new BadRequestError("Please provide valid email and password");
@@ -79,10 +78,7 @@ export const login = async (req, res, next) => {
 
   const user = await User.findOne({ email })
     .select("+password")
-    .populate(
-      "followers following",
-      "avatar username fullname followers following"
-    );
+    .populate("followers following", "avatar name followers following");
 
   const passwordMatched = await user.comparePassword(password);
 

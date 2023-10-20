@@ -3,6 +3,7 @@ import { useGetUserPostsMutation } from "../../../../features/posts/postapi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loader from "../../../Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Gallery = ({ user }) => {
   const [userPosts, { data, isSuccess, isLoading }] = useGetUserPostsMutation();
@@ -22,27 +23,35 @@ const Gallery = ({ user }) => {
     getUserPosts();
   }, [getUserPosts]);
 
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-3 gap-2 my-8 ">
       {isLoading && <Loader />}
       {isSuccess &&
         data.userposts.map((post) =>
           post.images.length > 0 ? (
-            <div className="w-full h-48">
+            <div
+              className="w-full h-48"
+              key={post._id}
+              onClick={() => navigate(`/post/${post._id}`)}
+            >
               <img
                 src={post.images[0].url}
                 alt=""
                 className="w-full h-full object-cover bg-center"
-                key={Math.floor(Math.random() * 100)}
               />
             </div>
           ) : (
-            <div className="w-full h-48">
+            <div
+              className="w-full h-48"
+              key={post._id}
+              onClick={() => navigate(`/post/${post._id}`)}
+            >
               <img
                 src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt=""
                 className="w-full h-full object-cover"
-                key={Math.floor(Math.random() * 100)}
               />
             </div>
           )

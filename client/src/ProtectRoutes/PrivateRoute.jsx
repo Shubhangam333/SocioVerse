@@ -5,26 +5,18 @@ import { useEffect } from "react";
 import Header from "../components/Home/Header/Header";
 
 const PrivateRoute = () => {
-  const { data, isLoading, error } = useProfileQuery();
-
-  useEffect(() => {
-    if (error) {
-      Navigate("/");
-    }
-  }, [error]);
+  const { data, isLoading, isSuccess, error } = useProfileQuery();
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : data ? (
+      {isLoading && <Loader />}{" "}
+      {isSuccess && (
         <>
           <Header />
           <Outlet />
         </>
-      ) : (
-        <Navigate to="/" replace />
       )}
+      {error && <Navigate to="/" replace />}
     </>
   );
 };

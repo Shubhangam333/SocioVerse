@@ -3,6 +3,7 @@ import { AiOutlineBell, AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 import { BiMessageAltDetail } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import NotificationDropDown from "../../Modal/NotificationDropDown";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -20,10 +21,8 @@ const Header = () => {
         <button className="text-2xl">
           <AiOutlineUser />
         </button>
-        <button className="text-2xl relative">
-          <AiOutlineBell />
-          <span className="absolute block bottom-4 left-6 text-red-400">1</span>
-        </button>
+
+        <NotificationDropDown />
         <button className="text-2xl">
           <BiMessageAltDetail />
         </button>

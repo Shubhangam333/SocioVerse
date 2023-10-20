@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema(
       },
     ],
     likes: [{ type: mongoose.Types.ObjectId, ref: "user" }],
-    comments: [{ type: mongoose.Types.ObjectId, ref: "comment" }],
+    comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
     user: { type: mongoose.Types.ObjectId, ref: "user" },
   },
   {
@@ -25,4 +25,4 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-export const Post = mongoose.model("Post", postSchema);
+export const Post = mongoose.model("post", postSchema);

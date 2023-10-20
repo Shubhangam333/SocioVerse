@@ -8,6 +8,7 @@ import "express-async-errors";
 //routes
 import userRoutes from "./routes/user.js";
 import postRoutes from "./routes/post.js";
+import notifyRoutes from "./routes/notify.js";
 
 import morgan from "morgan";
 import cloudinary from "cloudinary";
@@ -51,6 +52,7 @@ app.use(cors({ credentials: true }));
 
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", postRoutes);
+app.use("/api/v1", notifyRoutes);
 
 app.use(errorMiddleware);
 

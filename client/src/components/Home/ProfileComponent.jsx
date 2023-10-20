@@ -4,7 +4,6 @@ import ProfileHeader from "./Profile/ProfileHeader";
 import ProfileInfo from "./Profile/ProfileInfo";
 
 const ProfileComponent = ({ user }) => {
-  console.log(user);
   return (
     <div className="main m-auto">
       <ProfileHeader user={user} />

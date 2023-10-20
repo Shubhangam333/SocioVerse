@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const PostsListing = () => {
   const { data, isLoading, isSuccess, error } = useGetPostsQuery();
 
-  useEffect(() => {}, []);
+  console.log(error);
   return (
     <>
       {isLoading && <Loader />}

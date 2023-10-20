@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Suggestion = () => {
   const { data, isLoading, isSuccess, error } = useUserSuggestionQuery();
-  console.log(data);
+
   const [usersuggestion, setUserSuggestion] = useState([]);
 
   useEffect(() => {

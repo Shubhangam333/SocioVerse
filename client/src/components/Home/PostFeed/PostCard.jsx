@@ -12,20 +12,51 @@ import {
 } from "../../../features/posts/postapi";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useCreateNotificationMutation } from "../../../features/notify/notifyapi";
 
 const PostCard = ({ post }) => {
   const [likePost] = useLikePostMutation();
   const [unlikePost] = useUnLikePostMutation();
+  const [createNotify] = useCreateNotificationMutation();
   const [postLiked, setPostLiked] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
+  const { socket } = useSelector((state) => state.socket);
+
+  const dispatch = useDispatch();
 
   const handleLike = async () => {
     try {
       const res = await likePost(post._id).unwrap();
       toast.success(res.msg);
       setPostLiked(true);
+
+      const newPost = { ...post, likes: [...post.likes] };
+
+      socket.emit("likePost", newPost);
+
+      // Notify
+      const msg = {
+        text: "like your post.",
+        recipients: [post.user._id],
+        url: `/post/${post._id}`,
+        content: post.content,
+        image: post.images[0].url,
+      };
+
+      const notifyres = await createNotify(msg).unwrap();
+      console.log(notifyres);
+
+      if (notifyres) {
+        socket.emit("createNotify", {
+          ...notifyres.notifies,
+          user: {
+            username: userInfo.name,
+            avatar: userInfo.avatar,
+          },
+        });
+      }
     } catch (err) {
       console.log(err);
     }
