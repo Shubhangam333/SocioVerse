@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  notify: localStorage.getItem("notification")
-    ? JSON.parse(localStorage.getItem("notification"))
-    : [],
+  notify: [],
 };
 
 export const notifySlice = createSlice({
@@ -11,8 +9,7 @@ export const notifySlice = createSlice({
   initialState,
   reducers: {
     setNotification: (state, action) => {
-      state.notify = [...state.notify, action.payload];
-      localStorage.setItem("notification", JSON.stringify(state.notify));
+      state.notify = action.payload;
     },
   },
 });

@@ -4,7 +4,7 @@ import { baseQueryWithReauth } from "../customBaseQuery/baseQueryWithReAuth";
 export const postapi = createApi({
   reducerPath: "postapi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Posts"],
+  tagTypes: ["Posts", "Post"],
   endpoints: (builder) => ({
     createPost: builder.mutation({
       query: (postdata) => ({
@@ -19,7 +19,7 @@ export const postapi = createApi({
         url: "/posts",
         method: "GET",
       }),
-      providesTags: ["Posts"],
+      providesTags: ["Posts", "Post"],
     }),
     getPostById: builder.mutation({
       query: (id) => ({
@@ -39,12 +39,14 @@ export const postapi = createApi({
         url: `/post/${id}/like`,
         method: "PUT",
       }),
+      invalidatesTags: ["Post"],
     }),
     unLikePost: builder.mutation({
       query: (id) => ({
         url: `/post/${id}/unlike`,
         method: "PUT",
       }),
+      invalidatesTags: ["Post"],
     }),
   }),
 });

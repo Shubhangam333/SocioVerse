@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import audiobell from "./audio/got-it-done-613.mp3";
 import { useRef } from "react";
 import { setNotification } from "./features/notify/notifySlice";
+import { updatePosts } from "./features/posts/postSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -28,6 +29,24 @@ const SocketClient = () => {
     socket.emit("joinUser", userInfo);
   }, [socket, userInfo]);
 
+  // Likes
+  useEffect(() => {
+    socket.on("likeToClient", (newPost) => {
+      dispatch(updatePosts(newPost));
+    });
+
+    return () => socket.off("likeToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("unLikeToClient", (newPost) => {
+      console.log("unlikr", newPost);
+      dispatch(updatePosts(newPost));
+    });
+
+    return () => socket.off("unLikeToClient");
+  }, [socket, dispatch]);
+
   // Notification
   useEffect(() => {
     socket.on("createNotifyToClient", (msg) => {
@@ -45,7 +64,15 @@ const SocketClient = () => {
     });
 
     return () => socket.off("createNotifyToClient");
-  }, [socket]);
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("removeNotifyToClient", (msg) => {
+      console.log("rmove msgzzzz", msg);
+    });
+
+    return () => socket.off("removeNotifyToClient");
+  }, [socket, dispatch]);
   return (
     <>
       <audio controls ref={audioRef} style={{ display: "none" }}>

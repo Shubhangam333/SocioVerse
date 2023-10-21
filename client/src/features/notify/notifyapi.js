@@ -12,7 +12,23 @@ export const notifyapi = createApi({
         body: notificationdata,
       }),
     }),
+    removeNotification: builder.mutation({
+      query: (msg) => ({
+        url: `/notify/${msg.id}?url=${msg.url}`,
+        method: "DELETE",
+      }),
+    }),
+    getNotification: builder.mutation({
+      query: () => ({
+        url: "/notifies",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateNotificationMutation } = notifyapi;
+export const {
+  useCreateNotificationMutation,
+  useGetNotificationMutation,
+  useRemoveNotificationMutation,
+} = notifyapi;

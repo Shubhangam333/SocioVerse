@@ -7,11 +7,15 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import io from "socket.io-client";
 import SocketClient from "./SocketClient";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "./features/socket/socketSlice";
 
 import PostDisplayPage from "./pages/PostDisplayPage";
+import { useGetNotificationMutation } from "./features/notify/notifyapi";
+import { setNotification } from "./features/notify/notifySlice";
+import { useGetPostsQuery } from "./features/posts/postapi";
+import { setPosts } from "./features/posts/postSlice";
 
 // const router = createBrowserRouter([
 //   {
@@ -42,6 +46,9 @@ function App() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
+
+  const [getNotification] = useGetNotificationMutation();
+  const { data: postData, isSuccess } = useGetPostsQuery();
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
@@ -49,6 +56,24 @@ function App() {
 
     return () => socket.close();
   }, [dispatch]);
+
+  const getNotifies = useCallback(async () => {
+    const res = await getNotification().unwrap();
+
+    if (res.notifies.length > 0) {
+      dispatch(setNotification(res.notifies));
+    }
+  }, [dispatch, getNotification]);
+  useEffect(() => {
+    getNotifies();
+  }, [getNotifies]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setPosts(postData.posts));
+    }
+  }, [postData, dispatch, isSuccess]);
+
   return (
     <BrowserRouter>
       <Routes>

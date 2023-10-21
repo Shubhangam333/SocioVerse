@@ -24,6 +24,8 @@ const NotificationDropdown = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  console.log("notify", notify);
   return (
     <div ref={dropdownRef} className="relative">
       <button className=" py-4 rounded-md " onClick={toggleDropdown}>

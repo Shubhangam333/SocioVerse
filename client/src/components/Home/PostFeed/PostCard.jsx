@@ -13,12 +13,16 @@ import {
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCreateNotificationMutation } from "../../../features/notify/notifyapi";
+import {
+  useCreateNotificationMutation,
+  useRemoveNotificationMutation,
+} from "../../../features/notify/notifyapi";
 
 const PostCard = ({ post }) => {
   const [likePost] = useLikePostMutation();
   const [unlikePost] = useUnLikePostMutation();
   const [createNotify] = useCreateNotificationMutation();
+  const [removeNotify] = useRemoveNotificationMutation();
   const [postLiked, setPostLiked] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -32,12 +36,13 @@ const PostCard = ({ post }) => {
       toast.success(res.msg);
       setPostLiked(true);
 
-      const newPost = { ...post, likes: [...post.likes] };
+      const newPost = { ...post, likes: [...post.likes, userInfo] };
 
       socket.emit("likePost", newPost);
 
       // Notify
       const msg = {
+        id: userInfo._id,
         text: "like your post.",
         recipients: [post.user._id],
         url: `/post/${post._id}`,
@@ -46,7 +51,6 @@ const PostCard = ({ post }) => {
       };
 
       const notifyres = await createNotify(msg).unwrap();
-      console.log(notifyres);
 
       if (notifyres) {
         socket.emit("createNotify", {
@@ -66,6 +70,29 @@ const PostCard = ({ post }) => {
       const res = await unlikePost(post._id).unwrap();
       toast.success(res.msg);
       setPostLiked(false);
+
+      console.log(res);
+
+      const newPost = {
+        ...post,
+        likes: [...post.likes.filter((like) => like._id !== userInfo._id)],
+      };
+
+      socket.emit("unLikePost", newPost);
+
+      // Notify
+      const msg = {
+        id: userInfo._id,
+        text: "like your post.",
+        recipients: [post.user._id],
+        url: `/post/${post._id}`,
+      };
+
+      const notifyres = await removeNotify(msg).unwrap();
+
+      if (notifyres) {
+        socket.emit("removeNotify", msg);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -78,12 +105,20 @@ const PostCard = ({ post }) => {
   }, [post.likes, userInfo._id]);
 
   return (
-    <div className="m-4 shadow-2xl">
-      <p className="truncate">{post.content}</p>
+    <div className="m-4 shadow-2xl border-2 border-slate-300">
+      <div className="flex items-center border-2 border-slate-800 py-2">
+        <img
+          src={post.user && post.user.avatar.url}
+          alt="userprofilepic"
+          className="w-6 rounded-full border-2 border-blue-500"
+        />
+        <p>{post.user && post.user.name}</p>
+      </div>
+      <p className="truncate py-4">{post.content}</p>
       <div>
         <PostImageCarousel images={post.images} />
       </div>
-      <div className="flex justify-between my-4">
+      <div className="flex justify-between mt-4">
         <div className="flex gap-4">
           {postLiked ? (
             <AiFillHeart
@@ -101,6 +136,26 @@ const PostCard = ({ post }) => {
         <div>
           <AiOutlineSave className="text-2xl" />
         </div>
+      </div>
+      <div className="text-sm">
+        {post.likes.length > 0 ? (
+          <p>
+            {post.likes[0].name}
+            {post.likes.length < 2
+              ? " "
+              : `  and ${post.likes.length - 1} other `}
+            Liked this
+          </p>
+        ) : (
+          ""
+        )}
+      </div>
+      <div className="py-2 px-4">
+        <input
+          type="text"
+          className="w-full px-2 border-none border-b-2 border-slate-600"
+          placeholder="Write a comment"
+        />
       </div>
     </div>
   );

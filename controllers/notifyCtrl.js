@@ -3,11 +3,12 @@ import { notify } from "../models/notify.js";
 import { BadRequestError } from "../errors/customErrors.js";
 
 export const createNotify = async (req, res, next) => {
-  const { recipients, url, text, content, image } = req.body;
+  const { id, recipients, url, text, content, image } = req.body;
 
   if (recipients.includes(req.user._id.toString())) return;
 
   const notifies = await notify.create({
+    id,
     recipients,
     url,
     text,
@@ -25,18 +26,18 @@ export const createNotify = async (req, res, next) => {
   res.status(StatusCodes.OK).json({ notifies });
 };
 export const removeNotify = async (req, res, next) => {
-  const notify = await notify.findOneAndDelete({
+  const notifies = await notify.findOneAndDelete({
     id: req.params.id,
     url: req.query.url,
   });
 
-  if (!notify) {
+  if (!notifies) {
     throw new BadRequestError(
       "There was an error while processing your request"
     );
   }
 
-  res.status(StatusCodes.OK).json({ notify });
+  res.status(StatusCodes.OK).json({ notifies });
 };
 
 export const getNotifies = async (req, res, next) => {
