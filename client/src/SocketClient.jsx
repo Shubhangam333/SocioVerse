@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import audiobell from "./audio/got-it-done-613.mp3";
 import { useRef } from "react";
@@ -7,6 +7,7 @@ import {
   updateNotification,
 } from "./features/notify/notifySlice";
 import { updatePosts } from "./features/posts/postSlice";
+import { setUserInfo } from "./features/profile/profileSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -26,8 +27,6 @@ const SocketClient = () => {
 
   const audioRef = useRef();
   const dispatch = useDispatch();
-
-  const [like, setLike] = useState("");
   useEffect(() => {
     socket.emit("joinUser", userInfo);
   }, [socket, userInfo]);
@@ -43,11 +42,27 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on("unLikeToClient", (newPost) => {
-      console.log("unlikr", newPost);
       dispatch(updatePosts(newPost));
     });
 
     return () => socket.off("unLikeToClient");
+  }, [socket, dispatch]);
+
+  // Follow
+  useEffect(() => {
+    socket.on("followToClient", (newUser) => {
+      dispatch(setUserInfo(newUser));
+    });
+
+    return () => socket.off("followToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("unFollowToClient", (newUser) => {
+      dispatch(setUserInfo(newUser));
+    });
+
+    return () => socket.off("unFollowToClient");
   }, [socket, dispatch]);
 
   // Notification
@@ -71,7 +86,6 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on("removeNotifyToClient", (msg) => {
-      console.log(msg);
       dispatch(updateNotification(msg));
     });
 

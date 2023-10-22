@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import PostDetail from "../components/Home/PostFeed/PostDetail";
 import { useGetPostByIdMutation } from "../features/posts/postapi";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader/Loader";

@@ -12,7 +12,6 @@ export const notifySlice = createSlice({
       state.notify.push(...action.payload);
     },
     updateNotification: (state, action) => {
-      console.log("a", action.payload, "b", state.notify);
       const res = state.notify.filter(
         (n) => n._id !== action.payload._id && n.url !== action.payload.url
       );

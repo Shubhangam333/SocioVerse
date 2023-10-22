@@ -5,6 +5,7 @@ import { baseQueryWithReauth } from "../customBaseQuery/baseQueryWithReAuth";
 
 export const profileapi = createApi({
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     profile: builder.query({
       query: () => ({
@@ -18,23 +19,26 @@ export const profileapi = createApi({
         method: "GET",
       }),
     }),
-    getUserInfo: builder.mutation({
+    getUserInfo: builder.query({
       query: (id) => ({
         url: `/user/${id}`,
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
     follow: builder.mutation({
       query: (id) => ({
         url: `/user/${id}/follow`,
         method: "PUT",
       }),
+      invalidatesTags: ["User"],
     }),
     unFollow: builder.mutation({
       query: (id) => ({
         url: `/user/${id}/unfollow`,
         method: "PUT",
       }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
@@ -42,7 +46,7 @@ export const profileapi = createApi({
 export const {
   useProfileQuery,
   useUserSuggestionQuery,
-  useGetUserInfoMutation,
+  useGetUserInfoQuery,
   useFollowMutation,
   useUnFollowMutation,
 } = profileapi;
