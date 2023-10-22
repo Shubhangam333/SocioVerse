@@ -56,7 +56,7 @@ const PostCard = ({ post }) => {
         socket.emit("createNotify", {
           ...notifyres.notifies,
           user: {
-            username: userInfo.name,
+            name: userInfo.name,
             avatar: userInfo.avatar,
           },
         });
@@ -99,7 +99,8 @@ const PostCard = ({ post }) => {
   };
 
   useEffect(() => {
-    if (post.likes.includes(userInfo._id)) {
+    const isUserLiked = post.likes.some((like) => like._id === userInfo._id);
+    if (isUserLiked) {
       setPostLiked(true);
     }
   }, [post.likes, userInfo._id]);

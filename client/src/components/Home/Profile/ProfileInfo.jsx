@@ -48,23 +48,30 @@ const ProfileInfo = ({ user }) => {
     <>
       <p className="text-center text-2xl">{user.name}</p>
 
-      {userInfo._id !== user._id ? (
-        following ? (
-          <button
-            className="rounded-md bg-red-500 text-white px-4 py-2 m-auto"
-            onClick={handleUnFollow}
-          >
-            UnFollow
-          </button>
-        ) : (
-          <button
-            className="rounded-md bg-red-500 text-white px-4 py-2 m-auto"
-            onClick={handleFollow}
-          >
-            Follow
-          </button>
-        )
-      ) : null}
+      <div className="flex justify-between">
+        {userInfo._id !== user._id ? (
+          following ? (
+            <button
+              className="rounded-md bg-red-500 text-white px-4 py-2 "
+              onClick={handleUnFollow}
+            >
+              UnFollow
+            </button>
+          ) : (
+            <button
+              className="rounded-md bg-red-500 text-white px-4 py-2 "
+              onClick={handleFollow}
+            >
+              Follow
+            </button>
+          )
+        ) : null}
+
+        <div className="flex gap-8">
+          <p>Followers: {user.followers.length}</p>
+          <p>Following: {user.following.length}</p>
+        </div>
+      </div>
     </>
   );
 };

@@ -25,7 +25,6 @@ const NotificationDropdown = () => {
     };
   }, []);
 
-  console.log("notify", notify);
   return (
     <div ref={dropdownRef} className="relative">
       <button className=" py-4 rounded-md " onClick={toggleDropdown}>
@@ -42,7 +41,7 @@ const NotificationDropdown = () => {
                 key={notification.id}
                 className="px-4 py-2 border-b last:border-b-0 hover:bg-gray-100"
               >
-                {notification.text}
+                {notification.user.name} {notification.text}
               </div>
             ))
           ) : (

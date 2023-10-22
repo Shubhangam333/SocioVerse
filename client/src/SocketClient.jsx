@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import audiobell from "./audio/got-it-done-613.mp3";
 import { useRef } from "react";
-import { setNotification } from "./features/notify/notifySlice";
+import {
+  setNotification,
+  updateNotification,
+} from "./features/notify/notifySlice";
 import { updatePosts } from "./features/posts/postSlice";
 
 const spawnNotification = (body, icon, url, title) => {
@@ -56,10 +59,10 @@ const SocketClient = () => {
 
       // if (notify.sound) audioRef.current.play();
       spawnNotification(
-        msg.user.username + " " + msg.text,
+        msg.user.name + " " + msg.text,
         msg.user.avatar,
         msg.url,
-        "V-NETWORK"
+        "SOCIOVERSE-NETWORK"
       );
     });
 
@@ -68,7 +71,8 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on("removeNotifyToClient", (msg) => {
-      console.log("rmove msgzzzz", msg);
+      console.log(msg);
+      dispatch(updateNotification(msg));
     });
 
     return () => socket.off("removeNotifyToClient");

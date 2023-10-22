@@ -42,7 +42,9 @@ export const SocketServer = (socket) => {
   // Notification
   socket.on("createNotify", (msg) => {
     const client = users.find((user) => msg.recipients.includes(user.id));
-    client && socket.to(`${client.socketId}`).emit("createNotifyToClient", msg);
+    let arr = [];
+    arr.push(msg);
+    client && socket.to(`${client.socketId}`).emit("createNotifyToClient", arr);
   });
 
   socket.on("removeNotify", (msg) => {
