@@ -59,7 +59,14 @@ export const getPosts = async (req, res, next) => {
 
   const posts = await features.query
     .sort("-createdAt")
-    .populate("user likes", "avatar name followers");
+    .populate("user likes", "avatar name followers")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user likes",
+        select: "-password",
+      },
+    });
 
   res.status(StatusCodes.OK).json({ success: true, posts });
 };

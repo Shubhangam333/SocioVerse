@@ -48,6 +48,21 @@ export const postapi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
+    createCommentPost: builder.mutation({
+      query: (commentdata) => ({
+        url: `/comment`,
+        method: "POST",
+        body: commentdata,
+      }),
+      invalidatesTags: ["Post"],
+    }),
+    deleteCommentPost: builder.mutation({
+      query: (id) => ({
+        url: `/post/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Post"],
+    }),
   }),
 });
 
@@ -58,4 +73,6 @@ export const {
   useLikePostMutation,
   useGetUserPostsMutation,
   useUnLikePostMutation,
+  useCreateCommentPostMutation,
+  useDeleteCommentPostMutation,
 } = postapi;

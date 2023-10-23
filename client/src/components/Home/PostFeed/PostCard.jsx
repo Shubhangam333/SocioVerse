@@ -17,6 +17,7 @@ import {
   useCreateNotificationMutation,
   useRemoveNotificationMutation,
 } from "../../../features/notify/notifyapi";
+import CommentCard from "./CommentCard";
 
 const PostCard = ({ post }) => {
   const [likePost] = useLikePostMutation();
@@ -151,13 +152,7 @@ const PostCard = ({ post }) => {
           ""
         )}
       </div>
-      <div className="py-2 px-4">
-        <input
-          type="text"
-          className="w-full px-2 border-none border-b-2 border-slate-600"
-          placeholder="Write a comment"
-        />
-      </div>
+      <CommentCard post={post} />
     </div>
   );
 };
