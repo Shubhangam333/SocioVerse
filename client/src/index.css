@@ -70,3 +70,19 @@ img.active {
 .next {
   right: 0;
 }
+
+.shade {
+  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+}
+.card {
+  padding: 20px;
+  background-color: #ffffff; /* Background color of the card */
+  border: 1px solid #e0e0e0; /* Border color and thickness */
+  border-radius: 8px; /* Rounded corners for a card-like appearance */
+  box-shadow: -8px -8px 4px rgba(205, 209, 228, 0.8),
+    8px 8px 4px rgba(205, 209, 228, 0.8);
+  transition: transform 0.2s; /* Optional: Add a smooth hover effect */
+}
+.card:hover {
+  transform: translateY(-2px);
+}

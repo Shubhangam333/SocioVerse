@@ -107,7 +107,7 @@ const PostCard = ({ post }) => {
   }, [post.likes, userInfo._id]);
 
   return (
-    <div className="m-4 shadow-2xl border-2 border-slate-300">
+    <div className="m-4 shadow-2xl border-2 border-slate-300 card">
       <div className="flex items-center border-2 border-slate-800 py-2">
         <img
           src={post.user && post.user.avatar.url}

@@ -65,6 +65,24 @@ const SocketClient = () => {
     return () => socket.off("unFollowToClient");
   }, [socket, dispatch]);
 
+  // Comments
+  useEffect(() => {
+    socket.on("createCommentToClient", (newPost) => {
+      console.log(newPost);
+      dispatch(updatePosts(newPost));
+    });
+
+    return () => socket.off("createCommentToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("deleteCommentToClient", (newPost) => {
+      dispatch(updatePosts(newPost));
+    });
+
+    return () => socket.off("deleteCommentToClient");
+  }, [socket, dispatch]);
+
   // Notification
   useEffect(() => {
     socket.on("createNotifyToClient", (msg) => {

@@ -58,7 +58,7 @@ export const postapi = createApi({
     }),
     deleteCommentPost: builder.mutation({
       query: (id) => ({
-        url: `/post/${id}`,
+        url: `/comment/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Post"],
