@@ -24,7 +24,9 @@ const Header = () => {
 
         <NotificationDropDown />
         <button className="text-2xl">
-          <BiMessageAltDetail />
+          <Link to="/message">
+            <BiMessageAltDetail />
+          </Link>
         </button>
         <Link to={`/profile/${userInfo._id}`} className="cursor-pointer">
           <img

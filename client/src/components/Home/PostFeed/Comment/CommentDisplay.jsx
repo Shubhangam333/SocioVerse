@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
+import { BsReply, BsThreeDots } from "react-icons/bs";
 import { useDeleteCommentPostMutation } from "../../../../features/posts/postapi";
 import { useSelector } from "react-redux";
 import { useRemoveNotificationMutation } from "../../../../features/notify/notifyapi";
@@ -84,6 +84,7 @@ const CommentDisplay = ({ post }) => {
             ) : (
               <input type="text" value={comment.content} />
             )}
+
             {comment.user._id === userInfo._id && (
               <button
                 className="mx-2"
@@ -117,6 +118,7 @@ const CommentDisplay = ({ post }) => {
                 </button>
               </div>
             )}
+            <BsReply className="text-xl" />
           </div>
         ))}
     </div>
