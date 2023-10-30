@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsReply, BsThreeDots } from "react-icons/bs";
 import { useDeleteCommentPostMutation } from "../../../../features/posts/postapi";
 import { useSelector } from "react-redux";
 import { useRemoveNotificationMutation } from "../../../../features/notify/notifyapi";
+import ReplyInput from "./Reply/ReplyInput";
+import CommentInput from "./CommentInput";
 
 const CommentDisplay = ({ post }) => {
   const [openComment, setOpenComment] = useState(null);
   const [edit, setisEdit] = useState(false);
   const [deleteComment] = useDeleteCommentPostMutation();
   const { socket } = useSelector((state) => state.socket);
+
+  const [onReply, setOnReply] = useState(null);
+  const [comments, setComments] = useState(null);
+
+  const [showReplyId, setShowReplyId] = useState(null);
+  const [reply, setReply] = useState(null);
 
   const { userInfo } = useSelector((state) => state.auth);
   const [removeNotify] = useRemoveNotificationMutation();
@@ -66,62 +74,126 @@ const CommentDisplay = ({ post }) => {
   const handleEditClose = () => {
     setisEdit(false);
   };
-  return (
-    <div className="w-full px-4 my-2 flex flex-col">
-      {post.comments &&
-        post.comments.map((comment) => (
-          <div
-            key={comment._id}
-            className="flex border-l-2 border-red-600 my-2 relative"
-          >
-            <img
-              src={comment && comment.user.avatar.url}
-              alt="user profile pic"
-              className="w-6 rounded-full"
-            />
-            {!edit ? (
-              <p>{comment.content}</p>
-            ) : (
-              <input type="text" value={comment.content} />
-            )}
 
-            {comment.user._id === userInfo._id && (
-              <button
-                className="mx-2"
-                onClick={() => toggleOpenComment(comment._id)}
+  const [isOpen, setIsOpen] = useState(null);
+
+  const toggleReply = (comment) => {
+    if (isOpen === comment._id) {
+      setIsOpen(null);
+    } else {
+      setIsOpen(comment._id);
+    }
+    setOnReply({ ...comment, commentId: comment._id });
+  };
+
+  const showReply = (commentId) => {
+    if (showReplyId === commentId) {
+      setShowReplyId(null);
+    } else {
+      setShowReplyId(commentId);
+      const reply = post && post.comments.filter((c) => c.reply === commentId);
+      setReply(reply);
+    }
+
+    // console.log("rep", reply);
+    // console.log("cId", commentId);
+  };
+
+  useEffect(() => {
+    if (post) {
+      const cms = post.comments.filter((cm) => !cm.reply);
+      setComments(cms);
+    }
+  }, [post]);
+  return (
+    <>
+      <div className="w-full px-4 my-2 flex flex-col">
+        {comments &&
+          comments.map((comment) => (
+            <>
+              <div
+                key={comment._id}
+                className="flex border-l-2 border-red-600 my-2 relative"
               >
-                <BsThreeDots />
-              </button>
-            )}
-            {openComment === comment._id && (
-              <div className="absolute bottom-0 right-12 w-20 bg-white flex gap-4 shade z-30">
+                <img
+                  src={comment && comment.user.avatar.url}
+                  alt="user profile pic"
+                  className="w-6 rounded-full"
+                />
                 {!edit ? (
-                  <button
-                    className="bg-blue-400 px-2 text-white rounded-md"
-                    onClick={() => handleEdit(comment)}
-                  >
-                    Edit
-                  </button>
+                  <p>{comment.content}</p>
                 ) : (
+                  <input type="text" value={comment.content} />
+                )}
+
+                {comment.user._id === userInfo._id && (
                   <button
-                    className="bg-blue-400 px-2 text-white rounded-md"
-                    onClick={handleEditClose}
+                    className="mx-2"
+                    onClick={() => toggleOpenComment(comment._id)}
                   >
-                    Cancel
+                    <BsThreeDots />
                   </button>
                 )}
+
+                {openComment === comment._id && (
+                  <div className="absolute bottom-0 right-12 w-20 bg-white flex gap-4 shade z-30">
+                    {!edit ? (
+                      <button
+                        className="bg-blue-400 px-2 text-white rounded-md"
+                        onClick={() => handleEdit(comment)}
+                      >
+                        Edit
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-400 px-2 text-white rounded-md"
+                        onClick={handleEditClose}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                    <button
+                      className="bg-red-400 px-2 text-white rounded-md"
+                      onClick={() => handleDelete(comment)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+
+                <BsReply
+                  className="text-xl"
+                  onClick={() => toggleReply(comment)}
+                />
+                {isOpen === comment._id && (
+                  <ReplyInput
+                    comment={comment}
+                    isOpen={isOpen}
+                    onReply={onReply}
+                    post={post}
+                  />
+                )}
+              </div>
+              <div className="mx-4 my-2 ">
                 <button
-                  className="bg-red-400 px-2 text-white rounded-md"
-                  onClick={() => handleDelete(comment)}
+                  className="text-sm text-slate-600 hover:text-slate-900 hover:underline"
+                  onClick={() => showReply(comment._id)}
                 >
-                  Delete
+                  View all replies
                 </button>
               </div>
-            )}
-            <BsReply className="text-xl" />
-          </div>
-        ))}
-    </div>
+
+              <div>
+                {showReplyId === comment._id && (
+                  <div>
+                    {reply && reply.map((r) => <p key={r._id}>{r.content}</p>)}
+                  </div>
+                )}
+              </div>
+            </>
+          ))}
+      </div>
+    </>
   );
 };
 

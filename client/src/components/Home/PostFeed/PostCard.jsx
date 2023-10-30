@@ -8,7 +8,9 @@ import PostImageCarousel from "./PostImageCaraousel";
 import { useState } from "react";
 import {
   useLikePostMutation,
+  useSavePostMutation,
   useUnLikePostMutation,
+  useUnSavePostMutation,
 } from "../../../features/posts/postapi";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -18,13 +20,17 @@ import {
   useRemoveNotificationMutation,
 } from "../../../features/notify/notifyapi";
 import CommentCard from "./CommentCard";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 
 const PostCard = ({ post }) => {
   const [likePost] = useLikePostMutation();
   const [unlikePost] = useUnLikePostMutation();
+  const [savePost] = useSavePostMutation();
+  const [unSavePost] = useUnSavePostMutation();
   const [createNotify] = useCreateNotificationMutation();
   const [removeNotify] = useRemoveNotificationMutation();
   const [postLiked, setPostLiked] = useState(false);
+  const [postSaved, setPostSaved] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
@@ -99,13 +105,29 @@ const PostCard = ({ post }) => {
     }
   };
 
+  const handleSave = async () => {
+    const res = await savePost(post._id).unwrap();
+    toast.success(res.msg);
+    setPostSaved(true);
+  };
+  const handleUnSave = async () => {
+    const res = await unSavePost(post._id).unwrap();
+    toast.success(res.msg);
+    setPostSaved(false);
+  };
   useEffect(() => {
     const isUserLiked = post.likes.some((like) => like._id === userInfo._id);
     if (isUserLiked) {
       setPostLiked(true);
     }
-  }, [post.likes, userInfo._id]);
 
+    const isPostSaved = userInfo.saved.some((u) => u._id === post._id);
+
+    if (isPostSaved) {
+      setPostSaved(true);
+    }
+  }, [post.likes, userInfo._id, post._id, userInfo.saved]);
+  console.log("ps", postSaved);
   return (
     <div className="m-4 shadow-2xl border-2 border-slate-300 card">
       <div className="flex items-center border-2 border-slate-800 py-2">
@@ -135,9 +157,16 @@ const PostCard = ({ post }) => {
           )}
           <AiOutlineComment className="text-2xl" />
         </div>
-        <div>
-          <AiOutlineSave className="text-2xl" />
-        </div>
+
+        {postSaved ? (
+          <button onClick={handleUnSave}>
+            <BsBookmarkFill className="text-2xl" />
+          </button>
+        ) : (
+          <button onClick={handleSave}>
+            <BsBookmark className="text-2xl" />
+          </button>
+        )}
       </div>
       <div className="text-sm">
         {post.likes.length > 0 ? (

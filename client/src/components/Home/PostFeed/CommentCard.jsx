@@ -4,8 +4,8 @@ import CommentInput from "./Comment/CommentInput";
 const CommentCard = ({ post }) => {
   return (
     <>
-      <CommentDisplay post={post} />
       <CommentInput post={post} />
+      <CommentDisplay post={post} />
     </>
   );
 };

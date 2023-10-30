@@ -123,6 +123,54 @@ export const getUserPosts = async (req, res, next) => {
     userposts,
   });
 };
-export const savePost = async (req, res, next) => {};
-export const unSavePost = async (req, res, next) => {};
-export const getSavePosts = async (req, res, next) => {};
+export const savePost = async (req, res, next) => {
+  const user = await User.find({
+    _id: req.user._id,
+    saved: req.params.id,
+  });
+  if (user.length > 0)
+    res.status(StatusCodes.OK).json({ msg: "You saved this post already." });
+
+  const save = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $push: { saved: req.params.id },
+    },
+    { new: true }
+  );
+
+  if (!save) {
+    throw new BadRequestError("This User does not exist");
+  }
+
+  res.status(StatusCodes.OK).json({ msg: "Saved Post!" });
+};
+export const unSavePost = async (req, res, next) => {
+  const save = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $pull: { saved: req.params.id },
+    },
+    { new: true }
+  );
+  if (!save) {
+    throw new BadRequestError("This User does not exist");
+  }
+
+  res.status(StatusCodes.OK).json({ msg: "UnSaved Post!" });
+};
+export const getSavePosts = async (req, res, next) => {
+  const features = new APIfeatures(
+    Post.find({
+      _id: { $in: req.user.saved },
+    }),
+    req.query
+  ).paginating();
+
+  const savePosts = await features.query.sort("-createdAt");
+
+  res.status(StatusCodes.OK).json({
+    savePosts,
+    result: savePosts.length,
+  });
+};

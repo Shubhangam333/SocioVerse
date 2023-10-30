@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   posts: [],
+  isReply: false,
 };
 
 export const postSlice = createSlice({

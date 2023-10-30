@@ -26,8 +26,8 @@ router.route("/post/:id/unlike").put(isAuthenticated, unlikePost);
 
 router.route("/user_posts/:id").get(isAuthenticated, getUserPosts);
 
-router.route("/savePost/:id").get(isAuthenticated, savePost);
-router.route("/unSavePost/:id").get(isAuthenticated, unSavePost);
+router.route("/savePost/:id").put(isAuthenticated, savePost);
+router.route("/unSavePost/:id").put(isAuthenticated, unSavePost);
 router.route("/getSavePosts").get(isAuthenticated, getSavePosts);
 
 export default router;
