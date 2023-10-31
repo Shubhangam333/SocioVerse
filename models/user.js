@@ -48,7 +48,6 @@ const userSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
-  saved: [{ type: mongoose.Types.ObjectId, ref: "user" }],
   website: { type: String, default: "" },
   avatar: {
     public_id: {

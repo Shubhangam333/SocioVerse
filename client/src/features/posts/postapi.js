@@ -48,18 +48,7 @@ export const postapi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
-    savePost: builder.mutation({
-      query: (id) => ({
-        url: `/savePost/${id}`,
-        method: "PUT",
-      }),
-    }),
-    unSavePost: builder.mutation({
-      query: (id) => ({
-        url: `/unSavePost/${id}`,
-        method: "PUT",
-      }),
-    }),
+
     createCommentPost: builder.mutation({
       query: (commentdata) => ({
         url: `/comment`,
@@ -72,6 +61,20 @@ export const postapi = createApi({
       query: (id) => ({
         url: `/comment/${id}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["Post"],
+    }),
+    savePost: builder.mutation({
+      query: (id) => ({
+        url: `/savePost/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Post"],
+    }),
+    unSavePost: builder.mutation({
+      query: (id) => ({
+        url: `/unSavePost/${id}`,
+        method: "PUT",
       }),
       invalidatesTags: ["Post"],
     }),

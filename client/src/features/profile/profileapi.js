@@ -12,6 +12,7 @@ export const profileapi = createApi({
         url: "/user/profile",
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
     userSuggestion: builder.query({
       query: () => ({

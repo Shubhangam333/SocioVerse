@@ -1,6 +1,6 @@
 import { AiOutlineBell, AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 
-import { BiMessageAltDetail } from "react-icons/bi";
+import { BiBookmark, BiMessageAltDetail } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import NotificationDropDown from "../../Modal/NotificationDropDown";
@@ -19,7 +19,7 @@ const Header = () => {
           <AiOutlineHome />
         </button>
         <button className="text-2xl">
-          <AiOutlineUser />
+          <BiBookmark />
         </button>
 
         <NotificationDropDown />

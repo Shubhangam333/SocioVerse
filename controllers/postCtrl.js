@@ -124,17 +124,17 @@ export const getUserPosts = async (req, res, next) => {
   });
 };
 export const savePost = async (req, res, next) => {
-  const user = await User.find({
-    _id: req.user._id,
-    saved: req.params.id,
+  const user = await Post.find({
+    _id: req.params.id,
+    saved: req.user._id,
   });
   if (user.length > 0)
     res.status(StatusCodes.OK).json({ msg: "You saved this post already." });
 
-  const save = await User.findOneAndUpdate(
-    { _id: req.user._id },
+  const save = await Post.findOneAndUpdate(
+    { _id: req.params.id },
     {
-      $push: { saved: req.params.id },
+      $push: { saved: req.user._id },
     },
     { new: true }
   );
@@ -146,10 +146,10 @@ export const savePost = async (req, res, next) => {
   res.status(StatusCodes.OK).json({ msg: "Saved Post!" });
 };
 export const unSavePost = async (req, res, next) => {
-  const save = await User.findOneAndUpdate(
-    { _id: req.user._id },
+  const save = await Post.findOneAndUpdate(
+    { _id: req.params.id },
     {
-      $pull: { saved: req.params.id },
+      $pull: { saved: req.user._id },
     },
     { new: true }
   );

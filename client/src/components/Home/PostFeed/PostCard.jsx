@@ -8,8 +8,8 @@ import PostImageCarousel from "./PostImageCaraousel";
 import { useState } from "react";
 import {
   useLikePostMutation,
-  useSavePostMutation,
   useUnLikePostMutation,
+  useSavePostMutation,
   useUnSavePostMutation,
 } from "../../../features/posts/postapi";
 import { toast } from "react-toastify";
@@ -121,13 +121,13 @@ const PostCard = ({ post }) => {
       setPostLiked(true);
     }
 
-    const isPostSaved = userInfo.saved.some((u) => u._id === post._id);
+    const isPostSaved = post.saved.some((s) => s === userInfo._id);
 
     if (isPostSaved) {
       setPostSaved(true);
     }
-  }, [post.likes, userInfo._id, post._id, userInfo.saved]);
-  console.log("ps", postSaved);
+  }, [post.likes, userInfo._id, post._id, post.saved]);
+
   return (
     <div className="m-4 shadow-2xl border-2 border-slate-300 card">
       <div className="flex items-center border-2 border-slate-800 py-2">
