@@ -17,6 +17,7 @@ import { setNotification } from "./features/notify/notifySlice";
 import { useGetPostsQuery } from "./features/posts/postapi";
 import { setPosts } from "./features/posts/postSlice";
 import MessagePage from "./pages/MessagePage";
+import Saved from "./pages/Saved";
 
 // const router = createBrowserRouter([
 //   {
@@ -86,6 +87,7 @@ function App() {
           <Route path="profile/:id" element={<Profile />} />
           <Route path="post/:id" element={<PostDisplayPage />} />
           <Route path="message" element={<MessagePage />} />
+          <Route path="save" element={<Saved />} />
         </Route>
       </Routes>
       {socket && userInfo && <SocketClient />}
