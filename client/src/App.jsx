@@ -18,31 +18,8 @@ import { useGetPostsQuery } from "./features/posts/postapi";
 import { setPosts } from "./features/posts/postSlice";
 import MessagePage from "./pages/MessagePage";
 import Saved from "./pages/Saved";
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Login />,
-//   },
-//   {
-//     path: "/register",
-//     element: <Register />,
-//   },
-//   {
-//     path: "/verify/:token",
-//     element: <EmailVerify />,
-//   },
-//   {
-//     path: "",
-//     element: <PrivateRoute />,
-//     children: [
-//       {
-//         path: "/home",
-//         element: <Home />,
-//       },
-//     ],
-//   },
-// ]);
+import { setUserInfo } from "./features/profile/profileSlice";
+import { useProfileQuery } from "./features/profile/profileapi";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +28,7 @@ function App() {
 
   const [getNotification] = useGetNotificationMutation();
   const { data: postData, isSuccess } = useGetPostsQuery();
+  const { data: profileData, isSuccess: success } = useProfileQuery();
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
@@ -75,6 +53,12 @@ function App() {
       dispatch(setPosts(postData.posts));
     }
   }, [postData, dispatch, isSuccess]);
+
+  useEffect(() => {
+    if (success) {
+      dispatch(setUserInfo(profileData.user));
+    }
+  }, [profileData, success, dispatch]);
 
   return (
     <BrowserRouter>

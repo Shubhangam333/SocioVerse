@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import Loader from "../components/Loader/Loader";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../features/profile/profileSlice";
+// import { setUserInfo } from "../features/profile/profileSlice";
 
 const Profile = () => {
   const params = useParams();
@@ -14,15 +14,15 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
-  const getUserDetails = useCallback(async () => {
-    if (data) {
-      dispatch(setUserInfo({ ...data.user }));
-    }
-  }, [data, dispatch]);
+  // const getUserDetails = useCallback(async () => {
+  //   if (data) {
+  //     dispatch(setUserInfo({ ...data.user }));
+  //   }
+  // }, [data, dispatch]);
 
-  useEffect(() => {
-    getUserDetails();
-  }, [getUserDetails]);
+  // useEffect(() => {
+  //   getUserDetails();
+  // }, [getUserDetails]);
   return (
     <>
       {isLoading && <Loader />}

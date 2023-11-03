@@ -8,6 +8,10 @@ import {
 } from "./features/notify/notifySlice";
 import { updatePosts } from "./features/posts/postSlice";
 import { setUserInfo } from "./features/profile/profileSlice";
+import {
+  setAvailableUser,
+  setUnAvailableUser,
+} from "./features/status/statusSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -24,6 +28,8 @@ const spawnNotification = (body, icon, url, title) => {
 const SocketClient = () => {
   const { socket } = useSelector((state) => state.socket);
   const { userInfo } = useSelector((state) => state.auth);
+  const { online } = useSelector((state) => state.status);
+  const { profile } = useSelector((state) => state.profile);
 
   const audioRef = useRef();
   const dispatch = useDispatch();
@@ -92,7 +98,7 @@ const SocketClient = () => {
 
       // if (notify.sound) audioRef.current.play();
       spawnNotification(
-        msg.user.name + " " + msg.text,
+        // msg.user.name + " " + msg.text,
         msg.user.avatar,
         msg.url,
         "SOCIOVERSE-NETWORK"
@@ -108,6 +114,43 @@ const SocketClient = () => {
     });
 
     return () => socket.off("removeNotifyToClient");
+  }, [socket, dispatch]);
+
+  // Check User Online / Offline
+  useEffect(() => {
+    socket.emit("checkUserOnline", userInfo);
+  }, [socket, userInfo]);
+
+  useEffect(() => {
+    socket.on("checkUserOnlineToMe", (data) => {
+      console.log("data", data);
+      data.forEach((item) => {
+        if (!online.includes(item.id)) {
+          dispatch(setAvailableUser(item.id));
+        }
+      });
+    });
+
+    return () => socket.off("checkUserOnlineToMe");
+  }, [socket, dispatch, online]);
+
+  useEffect(() => {
+    socket.on("checkUserOnlineToClient", (id) => {
+      if (!online.includes(id)) {
+        dispatch(setAvailableUser(id));
+      }
+    });
+
+    return () => socket.off("checkUserOnlineToClient");
+  }, [socket, dispatch, online]);
+
+  // Check User Offline
+  useEffect(() => {
+    socket.on("CheckUserOffline", (id) => {
+      dispatch(setUnAvailableUser(id));
+    });
+
+    return () => socket.off("CheckUserOffline");
   }, [socket, dispatch]);
   return (
     <>

@@ -11,10 +11,9 @@ import {
   useRemoveNotificationMutation,
 } from "../../../features/notify/notifyapi";
 
-const ProfileInfo = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+const ProfileInfo = ({ user }) => {
+  const { profile } = useSelector((state) => state.profile);
   const { socket } = useSelector((state) => state.socket);
-  const { user } = useSelector((state) => state.profile);
 
   const [following, setFollowing] = useState(false);
 
@@ -36,18 +35,17 @@ const ProfileInfo = () => {
         id: user._id,
         text: "has started to follow you.",
         recipients: [res.newUser._id],
-        url: `/profile/${userInfo._id}`,
+        url: `/profile/${profile._id}`,
       };
 
       const notifyres = await createNotify(msg).unwrap();
-      console.log(notifyres);
 
       if (notifyres) {
         socket.emit("createNotify", {
           ...notifyres.notifies,
           user: {
-            name: userInfo.name,
-            avatar: userInfo.avatar,
+            name: profile.name,
+            avatar: profile.avatar,
           },
         });
       }
@@ -68,7 +66,7 @@ const ProfileInfo = () => {
         id: user._id,
         text: "has started to follow you.",
         recipients: [res.newUser._id],
-        url: `/profile/${userInfo._id}`,
+        url: `/profile/${profile._id}`,
       };
 
       const notifyres = await removeNotify(msg).unwrap();
@@ -82,14 +80,10 @@ const ProfileInfo = () => {
   };
 
   useEffect(() => {
-    if (
-      userInfo &&
-      user &&
-      user.following.some((u) => u._id === userInfo._id)
-    ) {
+    if (profile && profile.following.some((u) => u._id === user._id)) {
       setFollowing(true);
     }
-  }, [userInfo, user, following]);
+  }, [profile, user._id]);
 
   return (
     <>
@@ -98,7 +92,7 @@ const ProfileInfo = () => {
           {" "}
           <p className="text-center text-2xl">{user.name}</p>
           <div className="flex justify-between">
-            {userInfo._id !== user._id ? (
+            {profile._id !== user._id ? (
               following ? (
                 <button
                   className="rounded-md bg-red-500 text-white px-4 py-2 "

@@ -3,9 +3,9 @@ import { User } from "../models/user.js";
 import { StatusCodes } from "http-status-codes";
 
 export const profile = async (req, res, next) => {
-  const user = await User.findById(req.user.id).populate(
+  const user = await User.findById(req.user._id).populate(
     "followers following",
-    "avatar username fullname followers following"
+    "avatar name followers following"
   );
 
   if (!user) {

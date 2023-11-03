@@ -8,6 +8,7 @@ import profileReducer from "../profile/profileSlice";
 import socketReducer from "../socket/socketSlice";
 import notifyReducer from "../notify/notifySlice";
 import postReducer from "../posts/postSlice";
+import statusReducer from "../status/statusSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     socket: socketReducer,
     notify: notifyReducer,
     post: postReducer,
+    status: statusReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
