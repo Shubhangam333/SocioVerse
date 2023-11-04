@@ -71,6 +71,7 @@ function App() {
           <Route path="profile/:id" element={<Profile />} />
           <Route path="post/:id" element={<PostDisplayPage />} />
           <Route path="message" element={<MessagePage />} />
+          <Route path="message/:id" element={<MessagePage />} />
           <Route path="save" element={<Saved />} />
         </Route>
       </Routes>

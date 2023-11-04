@@ -100,12 +100,12 @@ export const SocketServer = (socket) => {
   // Check User Online / Offline
   socket.on("checkUserOnline", (data) => {
     const following = users.filter((user) =>
-      data.following.find((item) => item === user.id)
+      data.following.find((item) => item._id === user.id)
     );
     socket.emit("checkUserOnlineToMe", following);
 
     const clients = users.filter((user) =>
-      data.followers.find((item) => item === user.id)
+      data.followers.find((item) => item._id === user.id)
     );
 
     if (clients.length > 0) {
@@ -115,5 +115,11 @@ export const SocketServer = (socket) => {
           .emit("checkUserOnlineToClient", data._id);
       });
     }
+  });
+
+  // Message
+  socket.on("addMessage", (msg) => {
+    const user = users.find((user) => user.id === msg.recipient);
+    user && socket.to(`${user.socketId}`).emit("addMessageToClient", msg);
   });
 };

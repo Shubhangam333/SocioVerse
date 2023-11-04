@@ -10,6 +10,7 @@ import userRoutes from "./routes/user.js";
 import postRoutes from "./routes/post.js";
 import notifyRoutes from "./routes/notify.js";
 import commentRoutes from "./routes/comment.js";
+import messageRoutes from "./routes/message.js";
 
 import morgan from "morgan";
 import cloudinary from "cloudinary";
@@ -55,6 +56,7 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", postRoutes);
 app.use("/api/v1", notifyRoutes);
 app.use("/api/v1", commentRoutes);
+app.use("/api/v1", messageRoutes);
 
 app.use(errorMiddleware);
 

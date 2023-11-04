@@ -12,6 +12,7 @@ import {
   setAvailableUser,
   setUnAvailableUser,
 } from "./features/status/statusSlice";
+import { updateMessages } from "./features/messages/messageSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -123,7 +124,7 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on("checkUserOnlineToMe", (data) => {
-      console.log("data", data);
+      // console.log("data", data);
       data.forEach((item) => {
         if (!online.includes(item.id)) {
           dispatch(setAvailableUser(item.id));
@@ -151,6 +152,24 @@ const SocketClient = () => {
     });
 
     return () => socket.off("CheckUserOffline");
+  }, [socket, dispatch]);
+
+  // Message
+  useEffect(() => {
+    socket.on("addMessageToClient", (msg) => {
+      dispatch(updateMessages(msg));
+
+      // dispatch({
+      //   type: MESS_TYPES.ADD_USER,
+      //   payload: {
+      //     ...msg.user,
+      //     text: msg.text,
+      //     media: msg.media,
+      //   },
+      // });
+    });
+
+    return () => socket.off("addMessageToClient");
   }, [socket, dispatch]);
   return (
     <>

@@ -5,9 +5,11 @@ import { StatusCodes } from "http-status-codes";
 import { APIfeatures } from "../apifeatures/apiFeature.js";
 
 export const createMessage = async (req, res, next) => {
-  const { sender, recipient, text, media, call } = req.body;
+  const { sender, recipient, text, call } = req.body;
 
-  if (!recipient || (!text.trim() && media.length === 0 && !call)) return;
+  if (!recipient || !text.trim()) {
+    throw new BadRequestError("Invalid Details");
+  }
 
   const newConversation = await conversation.findOneAndUpdate(
     {
@@ -19,19 +21,15 @@ export const createMessage = async (req, res, next) => {
     {
       recipients: [sender, recipient],
       text,
-      media,
-      call,
     },
     { new: true, upsert: true }
   );
 
-  const newMessage = await new message.create({
+  const newMessage = await message.create({
     conversation: newConversation._id,
     sender,
-    call,
     recipient,
     text,
-    media,
   });
   if (!newMessage) {
     throw new BadRequestError("There was an error in performing your request");

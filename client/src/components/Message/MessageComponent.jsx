@@ -1,12 +1,14 @@
 import React from "react";
 import SideBar from "./SideBar";
 import ChatBox from "./ChatBox";
+import { useParams } from "react-router-dom";
 
 const MessageComponent = () => {
+  const { id } = useParams();
   return (
     <div className="main m-auto my-24 grid grid-cols-9 msg ">
       <SideBar />
-      <ChatBox />
+      {id && <ChatBox id={id} />}
     </div>
   );
 };

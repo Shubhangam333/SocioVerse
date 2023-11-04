@@ -9,6 +9,8 @@ import socketReducer from "../socket/socketSlice";
 import notifyReducer from "../notify/notifySlice";
 import postReducer from "../posts/postSlice";
 import statusReducer from "../status/statusSlice";
+import messageReducer from "../messages/messageSlice";
+import { messageapi } from "../messages/messageapi";
 
 export const store = configureStore({
   reducer: {
@@ -16,12 +18,14 @@ export const store = configureStore({
     [profileapi.reducerPath]: profileapi.reducer,
     [postapi.reducerPath]: postapi.reducer,
     [notifyapi.reducerPath]: notifyapi.reducer,
+    [messageapi.reducerPath]: messageapi.reducer,
     auth: authReducer,
     profile: profileReducer,
     socket: socketReducer,
     notify: notifyReducer,
     post: postReducer,
     status: statusReducer,
+    message: messageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -34,6 +38,7 @@ export const store = configureStore({
       authapi.middleware,
       profileapi.middleware,
       postapi.middleware,
-      notifyapi.middleware
+      notifyapi.middleware,
+      messageapi.middleware
     ),
 });
