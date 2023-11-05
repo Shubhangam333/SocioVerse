@@ -1,9 +1,11 @@
-import { AiOutlineBell, AiOutlineHome, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 
 import { BiBookmark, BiMessageAltDetail } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import NotificationDropDown from "../../Modal/NotificationDropDown";
+import "./header.css";
+import SearchBox from "../../Message/SearchBox";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -14,6 +16,9 @@ const Header = () => {
           <h1 className="text-4xl">SocioVerse</h1>
         </Link>
       </div>
+
+      {/* <SearchBox /> */}
+
       <div className="flex gap-8">
         <button className="text-2xl">
           <AiOutlineHome />

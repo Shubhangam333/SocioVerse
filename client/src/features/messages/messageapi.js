@@ -21,7 +21,17 @@ export const messageapi = createApi({
       }),
       providesTags: ["Message"],
     }),
+    getConversations: builder.query({
+      query: () => ({
+        url: `/conversations`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateMessageMutation, useGetMessagesQuery } = messageapi;
+export const {
+  useCreateMessageMutation,
+  useGetMessagesQuery,
+  useGetConversationsQuery,
+} = messageapi;

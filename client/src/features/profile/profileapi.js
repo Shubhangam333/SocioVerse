@@ -41,6 +41,12 @@ export const profileapi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    searchUsers: builder.mutation({
+      query: (search) => ({
+        url: `/searchUsers?name=${search}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -50,4 +56,5 @@ export const {
   useGetUserInfoQuery,
   useFollowMutation,
   useUnFollowMutation,
+  useSearchUsersMutation,
 } = profileapi;

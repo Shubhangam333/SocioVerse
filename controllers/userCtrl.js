@@ -99,3 +99,21 @@ export const suggestionsUser = async (req, res, next) => {
     result: users.length,
   });
 };
+
+export const searchUsers = async (req, res, next) => {
+  if (!req.query.name) {
+    return;
+  }
+
+  const users = await User.find({
+    name: { $regex: new RegExp(req.query.name, "i") },
+  })
+    .limit(5)
+    .select("name avatar");
+
+  if (!users) {
+    throw new NotFoundError("No users found");
+  }
+
+  res.status(StatusCodes.OK).json({ users });
+};

@@ -48,7 +48,7 @@ export const getConversations = async (req, res, next) => {
 
   const conversations = await features.query
     .sort("-updatedAt")
-    .populate("recipients", "avatar username fullname");
+    .populate("recipients", "avatar name");
 
   if (!conversations) {
     throw new NotFoundError("There was an error in performing your request");
