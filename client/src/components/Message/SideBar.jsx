@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageCard from "./MessageCard";
 import SearchBox from "./SearchBox";
 import { useGetConversationsQuery } from "../../features/messages/messageapi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setConversations } from "../../features/messages/messageSlice";
 
 const SideBar = () => {
@@ -12,6 +12,8 @@ const SideBar = () => {
 
   const { data, isLoading } = useGetConversationsQuery();
 
+  const [modalActive, setModalActive] = useState(false);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (data) {
@@ -19,15 +21,27 @@ const SideBar = () => {
     }
   }, [data, dispatch]);
 
+  const handleModal = () => {
+    setModalActive(!modalActive);
+  };
   return (
-    <div className="rounded-md  col-span-3 flex flex-col">
-      <div className="text-slate-600 border-2 border-slate-600 p-2 rounded-full flex justify-center items-center gap-2 ">
-        <h2>All Messages</h2>
-        <BiMessageAltDetail className="text-lg " />
+    <div className="col-span-3 flex flex-col mr-2">
+      <div className="text-slate-600 border-2 border-slate-600 p-2 rounded-md flex justify-between items-center gap-2 mb-2 ">
+        <div className="flex items-center">
+          <h2>All Messages</h2>
+          <BiMessageAltDetail className="text-lg " />
+        </div>
+        <button
+          className="rounded-md bg-green-600 text-white mr-4 p-2"
+          onClick={handleModal}
+        >
+          Add user
+        </button>
       </div>
 
       <div className="text-slate-600 border-2 border-slate-600  rounded-md p-2">
-        <SearchBox />
+        {modalActive && <SearchBox handleModal={handleModal} />}
+
         <div className="overflow-y-scroll h-96">
           {conversations &&
             conversations.map((f) => <MessageCard key={f._id} f={f} />)}

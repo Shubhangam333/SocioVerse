@@ -8,8 +8,12 @@ const MessageCard = ({ f }) => {
 
   const [recipient, setRecipient] = useState("");
   useEffect(() => {
-    setRecipient(f.recipients.find((r) => r._id !== profile._id));
-  }, [f.recipients, profile._id]);
+    if (f.recipients) {
+      setRecipient(f.recipients.find((r) => r._id !== profile._id));
+    } else {
+      setRecipient(f);
+    }
+  }, [f.recipients, profile._id, f]);
 
   console.log();
   return (
