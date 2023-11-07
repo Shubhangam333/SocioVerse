@@ -53,8 +53,8 @@ const ChatBox = ({ id }) => {
   return (
     <>
       {recipient && (
-        <div className="col-span-6 relative border-2 border-slate-600 rounded-md">
-          <div className="bg-white flex justify-between">
+        <div className="col-span-6 relative  rounded-md">
+          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md">
             <div className="flex gap-2 items-center">
               <img src={recipient[0].avatar.url} alt="" className="w-12" />
               <div className="flex-col ">
@@ -74,12 +74,12 @@ const ChatBox = ({ id }) => {
             className="chat-form "
             onSubmit={handleSubmit}
           >
-            <div className="flex w-full">
+            <div className="flex w-full border-2 border-slate-500 rounded-bl-md rounded-br-md">
               <input
                 type="text"
                 id="message"
                 placeholder="Enter your message..."
-                className="chat-input text-lg border-2 border-slate-500 rounded-md flex-1"
+                className="chat-input text-lg rounded-md flex-1"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
               />

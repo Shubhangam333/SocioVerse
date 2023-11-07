@@ -41,7 +41,10 @@ const MessageDisplay = ({ id }) => {
   }, [getAllMessages]);
 
   return (
-    <div className="message-display-container " ref={messageContainerRef}>
+    <div
+      className="message-display-container border-l-2 border-r-2 border-slate-600"
+      ref={messageContainerRef}
+    >
       <div className="flex flex-col justify-between overflow-y-scroll h-96 text-white">
         {isLoading ? (
           <h1>Loading</h1>
