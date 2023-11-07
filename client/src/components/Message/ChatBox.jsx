@@ -71,7 +71,7 @@ const ChatBox = ({ id }) => {
 
           <form
             id="send-message"
-            className="chat-form absolute bottom-0 right-0 left-0"
+            className="chat-form "
             onSubmit={handleSubmit}
           >
             <div className="flex w-full">
@@ -79,7 +79,7 @@ const ChatBox = ({ id }) => {
                 type="text"
                 id="message"
                 placeholder="Enter your message..."
-                className="chat-input text-2xl border-2 border-slate-500 rounded-md flex-1"
+                className="chat-input text-lg border-2 border-slate-500 rounded-md flex-1"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
               />
