@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
+import { ImAttachment } from "react-icons/im";
 
 const ChatBox = ({ id }) => {
   const [text, setText] = useState("");
@@ -53,8 +54,8 @@ const ChatBox = ({ id }) => {
   return (
     <>
       {recipient && (
-        <div className="col-span-6 relative border-2 border-slate-600 rounded-md">
-          <div className="bg-white flex justify-between">
+        <div className="col-span-6 relative  rounded-md">
+          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md">
             <div className="flex gap-2 items-center">
               <img src={recipient[0].avatar.url} alt="" className="w-12" />
               <div className="flex-col ">
@@ -71,21 +72,24 @@ const ChatBox = ({ id }) => {
 
           <form
             id="send-message"
-            className="chat-form absolute bottom-0 right-0 left-0"
+            className="chat-form "
             onSubmit={handleSubmit}
           >
-            <div className="flex w-full">
+            <div className="flex w-full border-2 border-slate-500 rounded-bl-md rounded-br-md">
               <input
                 type="text"
                 id="message"
                 placeholder="Enter your message..."
-                className="chat-input text-2xl border-2 border-slate-500 rounded-md flex-1"
+                className="chat-input text-lg flex-1 focus:outline-none px-2 py-1"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
               />
+              <button className="px-2">
+                <ImAttachment className="text-xl " />
+              </button>
               <button
                 type="submit"
-                className="chat-btn py-4 px-6 bg-blue-500 text-white focus:scale-105"
+                className="chat-btn w-12 bg-blue-500 text-white focus:scale-105 hover:scale-x-105"
               >
                 <i className="fas fa-paper-plane"></i>
               </button>

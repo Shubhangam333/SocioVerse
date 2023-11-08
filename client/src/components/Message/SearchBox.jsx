@@ -12,6 +12,10 @@ const SearchBox = ({ handleModal }) => {
 
   const [users, setUsers] = useState([]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   const getUsers = useCallback(async () => {
     try {
       if (search.length != 0) {
@@ -34,7 +38,10 @@ const SearchBox = ({ handleModal }) => {
     <div className=" modal-overlay z-50">
       <div className="fixed  w-1/4 search-modal z-40 ">
         <div className="flex ">
-          <form className="w-full text-lg relative m-auto bg-red-400 ">
+          <form
+            className="w-full text-lg relative m-auto bg-red-400 "
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               className="w-full border-2 border-slate-400 px-4 outline-none"
