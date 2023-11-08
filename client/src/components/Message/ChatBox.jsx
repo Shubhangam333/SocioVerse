@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
+import { ImAttachment } from "react-icons/im";
 
 const ChatBox = ({ id }) => {
   const [text, setText] = useState("");
@@ -79,13 +80,16 @@ const ChatBox = ({ id }) => {
                 type="text"
                 id="message"
                 placeholder="Enter your message..."
-                className="chat-input text-lg rounded-md flex-1"
+                className="chat-input text-lg flex-1 focus:outline-none px-2 py-1"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
               />
+              <button className="px-2">
+                <ImAttachment className="text-xl " />
+              </button>
               <button
                 type="submit"
-                className="chat-btn py-4 px-6 bg-blue-500 text-white focus:scale-105"
+                className="chat-btn w-12 bg-blue-500 text-white focus:scale-105 hover:scale-x-105"
               >
                 <i className="fas fa-paper-plane"></i>
               </button>

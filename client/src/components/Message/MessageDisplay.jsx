@@ -14,15 +14,16 @@ const MessageDisplay = ({ id }) => {
 
   // Scroll to the bottom of the container whenever new messages are added
   const scrollToBottom = () => {
+    console.log("hh", messageContainerRef.current.scrollTop);
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
     }
   };
 
-  //   useEffect(() => {
-  //     scrollToBottom();
-  //   }, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const getAllMessages = useCallback(async () => {
     try {
@@ -41,11 +42,11 @@ const MessageDisplay = ({ id }) => {
   }, [getAllMessages]);
 
   return (
-    <div
-      className="message-display-container border-l-2 border-r-2 border-slate-600"
-      ref={messageContainerRef}
-    >
-      <div className="flex flex-col justify-between overflow-y-scroll h-96 text-white">
+    <div className="message-display-container border-l-2 border-r-2 border-slate-600">
+      <div
+        className="flex flex-col justify-between overflow-y-scroll h-96 text-white"
+        ref={messageContainerRef}
+      >
         {isLoading ? (
           <h1>Loading</h1>
         ) : (
@@ -56,7 +57,7 @@ const MessageDisplay = ({ id }) => {
               id == message.recipient ? (
                 <div
                   key={index}
-                  className="message self-start bg-green-500 w-100 px-2 rounded-md my-2"
+                  className="message self-start bg-green-500 w-100 px-2 rounded-md m-2"
                 >
                   {message.text}
                 </div>
