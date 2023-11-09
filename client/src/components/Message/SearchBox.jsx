@@ -35,7 +35,7 @@ const SearchBox = ({ handleModal }) => {
   }, [getUsers]);
 
   return (
-    <div className=" modal-overlay z-50">
+    <div className=" modal-overlay z-50 transform transition-transform duration-300 ease-out hover:scale-110">
       <div className="fixed  w-1/4 search-modal z-40 ">
         <div className="flex ">
           <form

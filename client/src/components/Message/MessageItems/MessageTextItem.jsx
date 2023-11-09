@@ -1,11 +1,10 @@
 const MessageTextItem = ({ id, recipient, message, key }) => {
-  console.log("msg", message);
   return (
     <>
       {id === recipient ? (
-        <div className="self-start" key={key}>
+        <div className="self-start " key={key}>
           <div className="message bg-green-500 px-2  rounded-md m-2 w-fit mr-0">
-            <p> {message.text}</p>
+            <p className="text-right"> {message.text}</p>
           </div>
           <div>
             {message.media &&

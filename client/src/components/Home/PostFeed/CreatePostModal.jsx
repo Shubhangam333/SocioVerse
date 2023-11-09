@@ -70,7 +70,7 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     <div
       className={`fixed inset-0 flex items-center justify-center z-40 ${
         isOpen ? "" : "hidden"
-      }`}
+      } transform transition-transform duration-300 ease-out hover:scale-110`}
     >
       <div className="modal-overlay">
         <div className="modal bg-white rounded-md w-96">
