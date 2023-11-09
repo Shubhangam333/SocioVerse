@@ -4,15 +4,13 @@ import { BsImages } from "react-icons/bs";
 import PropTypes from "prop-types";
 import { useCreatePostMutation } from "../../../features/posts/postapi";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const CreatePostModal = ({ isOpen, onClose }) => {
   const [postContent, setPostContent] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
-  const [createpost, { isLoading }] = useCreatePostMutation();
-  const navigate = useNavigate();
+  const [createpost] = useCreatePostMutation();
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
 
@@ -72,7 +70,7 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     <div
       className={`fixed inset-0 flex items-center justify-center z-40 ${
         isOpen ? "" : "hidden"
-      }`}
+      } transform transition-transform duration-300 ease-out hover:scale-110`}
     >
       <div className="modal-overlay">
         <div className="modal bg-white rounded-md w-96">

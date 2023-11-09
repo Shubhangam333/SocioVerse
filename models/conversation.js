@@ -4,7 +4,16 @@ const conversationSchema = new mongoose.Schema(
   {
     recipients: [{ type: mongoose.Types.ObjectId, ref: "user" }],
     text: String,
-    media: Array,
+    media: [
+      {
+        public_id: {
+          type: String,
+        },
+        url: {
+          type: String,
+        },
+      },
+    ],
     call: Object,
   },
   {

@@ -12,7 +12,7 @@ import {
   setAvailableUser,
   setUnAvailableUser,
 } from "./features/status/statusSlice";
-import { updateMessages } from "./features/messages/messageSlice";
+import { fetchMessages } from "./features/messages/messageSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -155,18 +155,10 @@ const SocketClient = () => {
   }, [socket, dispatch]);
 
   // Message
-  useEffect(() => {
-    socket.on("addMessageToClient", (msg) => {
-      dispatch(updateMessages(msg));
 
-      // dispatch({
-      //   type: MESS_TYPES.ADD_USER,
-      //   payload: {
-      //     ...msg.user,
-      //     text: msg.text,
-      //     media: msg.media,
-      //   },
-      // });
+  useEffect(() => {
+    socket.on("addMessageToClient", () => {
+      dispatch(fetchMessages(true));
     });
 
     return () => socket.off("addMessageToClient");

@@ -15,7 +15,7 @@ const Suggestion = () => {
     }
   }, [data, isSuccess]);
   return (
-    <div className="col-span-2">
+    <div className="col-span-2 text-center box-shadow ">
       <h1>User Suggestions</h1>
       {isLoading && <Loader />}
       {usersuggestion.length > 0 && (

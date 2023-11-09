@@ -112,3 +112,21 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* file modal  */
+.file-modal {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.file-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+.label-image {
+  width: 4rem; /* Adjust the width as needed */
+  height: 4rem; /* Adjust the height as needed */
+  cursor: pointer;
+  /* Add more styles as needed */
+}

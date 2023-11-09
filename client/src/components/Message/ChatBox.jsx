@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
@@ -6,33 +6,48 @@ import { ImAttachment } from "react-icons/im";
 
 const ChatBox = ({ id }) => {
   const [text, setText] = useState("");
-  const [media, setMedia] = useState("");
+
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const { profile } = useSelector((state) => state.profile);
   const [createMessage, { isLoading }] = useCreateMessageMutation();
 
   const [recipient, setRecipient] = useState(null);
   const { socket } = useSelector((state) => state.socket);
+
   // const [loadMedia, setLoadMedia] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    setText("");
-    setMedia([]);
-    // setLoadMedia(true);
 
-    let newArr = [];
-    // if(media.length > 0) newArr = await imageUpload(media)
+    const formData = new FormData();
+
+    formData.append("sender", profile._id);
+    formData.append("recipient", id);
+    formData.append("text", text);
+
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append("media", selectedImages[i]);
+    }
+
+    let mediaArray = [];
+
+    if (imagePreviews.length > 0) {
+      for (let i = 0; i < imagePreviews.length; i++) {
+        mediaArray.push(imagePreviews[i]);
+      }
+    }
 
     const msg = {
       sender: profile._id,
       recipient: id,
       text,
-      media: newArr,
+      media: mediaArray,
     };
 
     try {
-      const res = await createMessage(msg);
+      const res = await createMessage(formData);
       if (res) {
         const { _id, avatar, name } = profile;
         socket.emit("addMessage", {
@@ -41,10 +56,46 @@ const ChatBox = ({ id }) => {
         });
 
         setText("");
+        setImagePreviews([]);
+        setSelectedImages([]);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    files.forEach((file) => {
+      setSelectedImages((prevImages) => [...prevImages, file]);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // console.log(e.target.result);
+
+        setImagePreviews((prevImagePrev) => [
+          ...prevImagePrev,
+          e.target.result,
+        ]);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleDeleteImage = (index) => {
+    setSelectedImages((prevSelectedImages) => {
+      const newSelectedImages = [...prevSelectedImages];
+      newSelectedImages.splice(index, 1);
+      return newSelectedImages;
+    });
+
+    setImagePreviews((prevImagePreviews) => {
+      const newImagePreviews = [...prevImagePreviews];
+      newImagePreviews.splice(index, 1);
+      return newImagePreviews;
+    });
   };
 
   useEffect(() => {
@@ -68,7 +119,11 @@ const ChatBox = ({ id }) => {
             </div>
           </div>
 
-          <MessageDisplay id={id} />
+          <MessageDisplay
+            id={id}
+            handleDeleteImage={handleDeleteImage}
+            imagePreviews={imagePreviews}
+          />
 
           <form
             id="send-message"
@@ -84,9 +139,23 @@ const ChatBox = ({ id }) => {
                 onChange={(e) => setText(e.target.value)}
                 value={text}
               />
-              <button className="px-2">
-                <ImAttachment className="text-xl " />
-              </button>
+              {/* <button className="px-2"></button> */}
+
+              <div className="flex justify-center items-center ">
+                <label htmlFor="fileInput" className="hover:cursor-pointer">
+                  <ImAttachment className="text-xl " />
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="fileInput"
+                  name="postimage"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </div>
+
               <button
                 type="submit"
                 className="chat-btn w-12 bg-blue-500 text-white focus:scale-105 hover:scale-x-105"

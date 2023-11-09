@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   messages: [],
   conversations: [],
+  selectedImages: [],
+  fetchMsg: false,
 };
 
 export const messageSlice = createSlice({
@@ -14,6 +16,9 @@ export const messageSlice = createSlice({
     },
     updateMessages: (state, action) => {
       state.messages = [action.payload, ...state.messages];
+    },
+    fetchMessages: (state, action) => {
+      state.fetchMsg = action.payload;
     },
     setConversations: (state, action) => {
       state.conversations = action.payload;
@@ -29,6 +34,7 @@ export const {
   updateMessages,
   setConversations,
   updateConversations,
+  fetchMessages,
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

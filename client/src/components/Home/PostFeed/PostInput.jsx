@@ -4,12 +4,16 @@ import CreatePostModal from "./CreatePostModal";
 const PostInput = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   return (
-    <div>
+    <div className="px-4">
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        className="flex justify-between items-center w-full"
         onClick={() => setModalOpen(true)}
       >
-        Create Post
+        <p>Whats on your mind?</p>
+        <span className="px-4 py-2 bg-blue-500 text-white rounded-md">
+          {" "}
+          Create Post
+        </span>
       </button>
 
       <CreatePostModal

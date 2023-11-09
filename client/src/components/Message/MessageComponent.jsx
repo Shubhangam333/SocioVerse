@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SideBar from "./SideBar";
 import ChatBox from "./ChatBox";
 import { useParams } from "react-router-dom";
-import SearchBox from "./SearchBox";
 
 const MessageComponent = () => {
   const { id } = useParams();

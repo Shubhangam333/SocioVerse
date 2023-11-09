@@ -6,7 +6,16 @@ const messageSchema = new mongoose.Schema(
     sender: { type: mongoose.Types.ObjectId, ref: "user" },
     recipient: { type: mongoose.Types.ObjectId, ref: "user" },
     text: String,
-    media: Array,
+    media: [
+      {
+        public_id: {
+          type: String,
+        },
+        url: {
+          type: String,
+        },
+      },
+    ],
     call: Object,
   },
   {
