@@ -31,6 +31,7 @@ const PostCard = ({ post }) => {
   const [removeNotify] = useRemoveNotificationMutation();
   const [postLiked, setPostLiked] = useState(false);
   const [postSaved, setPostSaved] = useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
@@ -128,6 +129,14 @@ const PostCard = ({ post }) => {
     }
   }, [post.likes, userInfo._id, post._id, post.saved]);
 
+  const toggleReadMore = () => {
+    setExpanded(!isExpanded);
+  };
+
+  const truncatedContent = isExpanded
+    ? post.content
+    : post.content.slice(0, 150);
+
   return (
     <div className="m-4 shadow-2xl border-2 border-slate-300 card">
       <div className="flex items-center border-2 border-slate-800 py-2">
@@ -138,7 +147,25 @@ const PostCard = ({ post }) => {
         />
         <p>{post.user && post.user.name}</p>
       </div>
-      <p className="truncate py-4">{post.content}</p>
+      <p className=" py-4">
+        {truncatedContent}{" "}
+        {!isExpanded && post.content.length > 150 && (
+          <button
+            onClick={toggleReadMore}
+            className="text-blue-500 hover:underline"
+          >
+            Read more
+          </button>
+        )}
+        {isExpanded && post.content.length > 150 && (
+          <button
+            onClick={toggleReadMore}
+            className="text-blue-500 hover:underline"
+          >
+            See Less
+          </button>
+        )}
+      </p>
       <div>
         <PostImageCarousel images={post.images} />
       </div>

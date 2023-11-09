@@ -19,12 +19,12 @@ const Suggestion = () => {
       <h1>User Suggestions</h1>
       {isLoading && <Loader />}
       {usersuggestion.length > 0 && (
-        <div className="flex flex-col items-center">
-          <div className="flex justify-between">
+        <div className="flex flex-col w-full justify-center items-center">
+          <div className="flex  w-full  gap-2">
             <img
               src={usersuggestion[0].avatar.url}
               alt=""
-              className="w-8 rounded-full"
+              className="w-8 rounded-full border-2 border-red-500"
             />
             <Link to={`/profile/${usersuggestion[0]._id}`}>
               <span>{usersuggestion[0].name}</span>
