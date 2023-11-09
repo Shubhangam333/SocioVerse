@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useGetMessagesQuery } from "../../features/messages/messageapi";
 import { setMessages } from "../../features/messages/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineClose } from "react-icons/ai";
 
-const MessageDisplay = ({ id }) => {
+const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
   const messageContainerRef = useRef(null);
 
   //   const [getMessages, { isLoading }] = useGetMessagesQuery();
@@ -42,10 +43,11 @@ const MessageDisplay = ({ id }) => {
   }, [getAllMessages]);
 
   return (
-    <div className="message-display-container border-l-2 border-r-2 border-slate-600">
+    <div className="message-display-container border-l-2 border-r-2 border-slate-600 h-96">
       <div
-        className="flex flex-col justify-between overflow-y-scroll h-96 text-white"
+        className="flex flex-col justify-between overflow-y-scroll  text-white"
         ref={messageContainerRef}
+        style={{ height: "90%" }}
       >
         {isLoading ? (
           <h1>Loading</h1>
@@ -71,6 +73,20 @@ const MessageDisplay = ({ id }) => {
               )
             )
         )}
+      </div>
+      <div className=" flex  gap-2  w-full  px-2">
+        {imagePreviews &&
+          imagePreviews.map((image, index) => (
+            <div className="relative" key={image.name}>
+              <img src={image} className="w-8 h-8 rounded-md " />
+              <button
+                className=" text-white bg-red-500 rounded-md absolute top-0 right-0"
+                onClick={() => handleDeleteImage(index)}
+              >
+                <AiOutlineClose className="text-xs" />
+              </button>
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "socioverse_avatar", // Optional: Specify a folder in Cloudinary
+    folder: "socioverse_avatar",
     allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
@@ -13,7 +13,14 @@ const storage = new CloudinaryStorage({
 const Poststorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "socioverse_posts", // Optional: Specify a folder in Cloudinary
+    folder: "socioverse_posts",
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
+});
+const Messagestorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "socioverse_messages",
     allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
@@ -21,3 +28,5 @@ const Poststorage = new CloudinaryStorage({
 export const postupload = multer({ storage: Poststorage });
 
 export const upload = multer({ storage: storage });
+
+export const msgUpload = multer({ storage: Messagestorage });

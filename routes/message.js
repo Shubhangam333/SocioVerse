@@ -7,10 +7,13 @@ import {
   getConversations,
   getMessages,
 } from "../controllers/messageCtrl.js";
+import { msgUpload } from "../config/imageupload.js";
 
 const router = express.Router();
 
-router.route("/message").post(isAuthenticated, createMessage);
+router
+  .route("/message")
+  .post(msgUpload.array("msgimages"), isAuthenticated, createMessage);
 
 router.route("/conversations").get(isAuthenticated, getConversations);
 

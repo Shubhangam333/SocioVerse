@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   messages: [],
   conversations: [],
+  selectedImages: [],
+  imagePreviews: [],
 };
 
 export const messageSlice = createSlice({
