@@ -5,7 +5,6 @@ import { updateConversations } from "../../features/messages/messageSlice";
 const SearchResultCard = ({ user }) => {
   const dispatch = useDispatch();
   const handleClick = (user) => {
-    console.log(user);
     dispatch(updateConversations(user));
   };
 

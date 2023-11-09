@@ -20,7 +20,6 @@ const ChatBox = ({ id }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    setText("");
 
     const formData = new FormData();
 
@@ -32,11 +31,19 @@ const ChatBox = ({ id }) => {
       formData.append("media", selectedImages[i]);
     }
 
+    let mediaArray = [];
+
+    if (imagePreviews.length > 0) {
+      for (let i = 0; i < imagePreviews.length; i++) {
+        mediaArray.push(imagePreviews[i]);
+      }
+    }
+
     const msg = {
       sender: profile._id,
       recipient: id,
       text,
-      media: formData.get("media"),
+      media: mediaArray,
     };
 
     try {
@@ -49,6 +56,8 @@ const ChatBox = ({ id }) => {
         });
 
         setText("");
+        setImagePreviews([]);
+        setSelectedImages([]);
       }
     } catch (error) {
       console.log(error);

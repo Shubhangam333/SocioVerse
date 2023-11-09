@@ -1,13 +1,13 @@
-const MessageTextItem = ({ id, recipient, message }) => {
-  console.log(message);
+const MessageTextItem = ({ id, recipient, message, key }) => {
+  console.log("msg", message);
   return (
     <>
       {id === recipient ? (
-        <div className="self-start">
-          <div className="message bg-green-500 px-2 w-fit rounded-md m-2 ">
-            {message.text}
+        <div className="self-start" key={key}>
+          <div className="message bg-green-500 px-2  rounded-md m-2 w-fit mr-0">
+            <p> {message.text}</p>
           </div>
-          <div className="">
+          <div>
             {message.media &&
               message.media.map((m) => (
                 <img src={m.url} key={m._id} className="rounded-md" />
@@ -15,14 +15,14 @@ const MessageTextItem = ({ id, recipient, message }) => {
           </div>
         </div>
       ) : (
-        <div className="self-end mb-2">
-          <div className="message bg-red-500 px-2 w-fit rounded-md m-2 self-end">
-            {message.text}
+        <div className="self-end " key={key}>
+          <div className="message bg-red-500 px-2 rounded-md m-2  w-fit mr-0">
+            <p> {message.text}</p>
           </div>
-          <div className="self-end ">
+          <div>
             {message.media &&
               message.media.map((m) => (
-                <img src={m.url} key={m._id} className="rounded-md" />
+                <img src={m.url} key={m._id} className="rounded-md " />
               ))}
           </div>
         </div>
