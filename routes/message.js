@@ -13,7 +13,7 @@ const router = express.Router();
 
 router
   .route("/message")
-  .post(msgUpload.array("msgimages"), isAuthenticated, createMessage);
+  .post(msgUpload.array("media"), isAuthenticated, createMessage);
 
 router.route("/conversations").get(isAuthenticated, getConversations);
 

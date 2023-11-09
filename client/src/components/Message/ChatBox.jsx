@@ -6,7 +6,6 @@ import { ImAttachment } from "react-icons/im";
 
 const ChatBox = ({ id }) => {
   const [text, setText] = useState("");
-  const [media, setMedia] = useState("");
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -22,21 +21,26 @@ const ChatBox = ({ id }) => {
     e.preventDefault();
     if (!text.trim()) return;
     setText("");
-    setMedia([]);
-    // setLoadMedia(true);
 
-    let newArr = [];
-    // if(media.length > 0) newArr = await imageUpload(media)
+    const formData = new FormData();
+
+    formData.append("sender", profile._id);
+    formData.append("recipient", id);
+    formData.append("text", text);
+
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append("media", selectedImages[i]);
+    }
 
     const msg = {
       sender: profile._id,
       recipient: id,
       text,
-      media: newArr,
+      media: formData.get("media"),
     };
 
     try {
-      const res = await createMessage(msg);
+      const res = await createMessage(formData);
       if (res) {
         const { _id, avatar, name } = profile;
         socket.emit("addMessage", {
@@ -53,8 +57,6 @@ const ChatBox = ({ id }) => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-
-    console.log(files);
 
     files.forEach((file) => {
       setSelectedImages((prevImages) => [...prevImages, file]);

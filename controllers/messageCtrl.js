@@ -11,6 +11,22 @@ export const createMessage = async (req, res, next) => {
     throw new BadRequestError("Invalid Details");
   }
 
+  let mediaLinks = [];
+
+  console.log(req.files);
+
+  if (req.files) {
+    mediaLinks = [];
+    let mediaFiles = req.files;
+
+    for (let i = 0; i < mediaFiles.length; i++) {
+      mediaLinks.push({
+        public_id: mediaFiles[i].filename,
+        url: mediaFiles[i].path,
+      });
+    }
+  }
+  console.log(mediaLinks);
   const newConversation = await conversation.findOneAndUpdate(
     {
       $or: [
@@ -21,6 +37,7 @@ export const createMessage = async (req, res, next) => {
     {
       recipients: [sender, recipient],
       text,
+      media: mediaLinks,
     },
     { new: true, upsert: true }
   );
@@ -30,6 +47,7 @@ export const createMessage = async (req, res, next) => {
     sender,
     recipient,
     text,
+    media: mediaLinks,
   });
   if (!newMessage) {
     throw new BadRequestError("There was an error in performing your request");

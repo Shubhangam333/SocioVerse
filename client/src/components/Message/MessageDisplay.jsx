@@ -3,6 +3,7 @@ import { useGetMessagesQuery } from "../../features/messages/messageapi";
 import { setMessages } from "../../features/messages/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
+import MessageTextItem from "./MessageItems/MessageTextItem";
 
 const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
   const messageContainerRef = useRef(null);
@@ -15,7 +16,6 @@ const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
 
   // Scroll to the bottom of the container whenever new messages are added
   const scrollToBottom = () => {
-    console.log("hh", messageContainerRef.current.scrollTop);
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
@@ -43,9 +43,9 @@ const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
   }, [getAllMessages]);
 
   return (
-    <div className="message-display-container border-l-2 border-r-2 border-slate-600 h-96">
+    <div className="message-display-container border-l-2 border-r-2 border-slate-600 h-96 overflow-y-scroll">
       <div
-        className="flex flex-col justify-between overflow-y-scroll  text-white"
+        className="flex flex-col   text-white "
         ref={messageContainerRef}
         style={{ height: "90%" }}
       >
@@ -55,22 +55,31 @@ const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
           messages
             .slice()
             .reverse()
-            .map((message, index) =>
-              id == message.recipient ? (
-                <div
-                  key={index}
-                  className="message self-start bg-green-500 w-100 px-2 rounded-md m-2"
-                >
-                  {message.text}
-                </div>
-              ) : (
-                <div
-                  key={index}
-                  className="message self-end bg-red-500 w-100 px-2 rounded-md my-2"
-                >
-                  {message.text}
-                </div>
+            .map(
+              (message) => (
+                <MessageTextItem
+                  id={id}
+                  recipient={message.recipient}
+                  message={message}
+                  key={message._id}
+                />
               )
+              // id === message.recipient ? (
+
+              //   <div
+              //     key={index}
+              //     className="message self-start bg-green-500 w-100 px-2 rounded-md m-2"
+              //   >
+              //     {message.text}
+              //   </div>
+              // ) : (
+              //   <div
+              //     key={index}
+              //     className="message self-end bg-red-500 w-100 px-2 rounded-md my-2"
+              //   >
+              //     {message.text}
+              //   </div>
+              // )
             )
         )}
       </div>
