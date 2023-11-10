@@ -2,9 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { updateConversations } from "../../features/messages/messageSlice";
 import { useCreateConversationMutation } from "../../features/messages/messageapi";
-import { useState } from "react";
 
-const SearchResultCard = ({ user }) => {
+const SearchResultCard = ({ user, setModalActive }) => {
   const dispatch = useDispatch();
   const [createConversation] = useCreateConversationMutation();
 
@@ -15,6 +14,7 @@ const SearchResultCard = ({ user }) => {
         recipient: user._id,
         sender: profile._id,
       }).unwrap();
+      setModalActive(false);
     } catch (error) {
       console.log(error);
     }

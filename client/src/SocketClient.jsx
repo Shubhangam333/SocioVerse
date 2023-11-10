@@ -12,7 +12,10 @@ import {
   setAvailableUser,
   setUnAvailableUser,
 } from "./features/status/statusSlice";
-import { fetchMessages } from "./features/messages/messageSlice";
+import {
+  fetchConversations,
+  fetchMessages,
+} from "./features/messages/messageSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -159,9 +162,21 @@ const SocketClient = () => {
   useEffect(() => {
     socket.on("addMessageToClient", () => {
       dispatch(fetchMessages(true));
+      dispatch(fetchConversations(true));
+      console.log("helloadd");
     });
 
     return () => socket.off("addMessageToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("removeConversationToClient", () => {
+      dispatch(fetchConversations(true));
+      dispatch(fetchMessages(true));
+      console.log("helloremove");
+    });
+
+    return () => socket.off("removeConversationToClient");
   }, [socket, dispatch]);
   return (
     <>

@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "./SearchBox";
 import { useGetConversationsQuery } from "../../features/messages/messageapi";
 import { useEffect, useState } from "react";
-import { setConversations } from "../../features/messages/messageSlice";
+import {
+  fetchConversations,
+  setConversations,
+} from "../../features/messages/messageSlice";
 import ConversationCard from "./ConversationCard";
 import Loader from "../Loader/Loader";
 
 const SideBar = ({ setConversationId }) => {
   const { profile } = useSelector((state) => state.profile);
-  const { conversations } = useSelector((state) => state.message);
+  const { conversations, fetchConv } = useSelector((state) => state.message);
 
-  const { data, isLoading } = useGetConversationsQuery();
+  const { data, isLoading, refetch } = useGetConversationsQuery();
 
   const [modalActive, setModalActive] = useState(false);
 
@@ -21,6 +24,14 @@ const SideBar = ({ setConversationId }) => {
       dispatch(setConversations(data.conversations));
     }
   }, [data, dispatch]);
+
+  useEffect(() => {
+    if (fetchConv) {
+      refetch();
+      dispatch(fetchConversations(false));
+      console.log("hellofetch conv");
+    }
+  }, [refetch, dispatch, fetchConv]);
 
   const handleModal = () => {
     setModalActive(!modalActive);
@@ -42,7 +53,12 @@ const SideBar = ({ setConversationId }) => {
       </div>
 
       <div className="text-slate-600 border-2 border-slate-600  rounded-md p-2 h-full">
-        {modalActive && <SearchBox handleModal={handleModal} />}
+        {modalActive && (
+          <SearchBox
+            handleModal={handleModal}
+            setModalActive={setModalActive}
+          />
+        )}
 
         <div className="overflow-y-scroll h-96">
           {isLoading && <Loader />}

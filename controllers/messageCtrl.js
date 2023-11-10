@@ -8,6 +8,8 @@ import { v2 as cloudinary } from "cloudinary";
 export const createMessage = async (req, res, next) => {
   const { sender, recipient, text, call } = req.body;
 
+  console.log(sender, recipient, text);
+
   if (!recipient || !text.trim()) {
     throw new BadRequestError("Invalid Details");
   }
@@ -73,17 +75,15 @@ export const createConversation = async (req, res, next) => {
 
 export const getConversations = async (req, res, next) => {
   const features = new APIfeatures(
-    conversation
-      .find({
-        recipients: req.user._id,
-      })
-      .populate("recipients", "name , avatar, followers , following"),
+    conversation.find({
+      recipients: req.user._id,
+    }),
     req.query
   ).paginating();
 
   const conversations = await features.query
     .sort("-updatedAt")
-    .populate("recipients", "avatar name");
+    .populate("recipients", "avatar name followers following");
 
   if (!conversations) {
     throw new NotFoundError("There was an error in performing your request");

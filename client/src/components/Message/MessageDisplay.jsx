@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import MessageTextItem from "./MessageItems/MessageTextItem";
 
-const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
+const MessageDisplay = ({ handleDeleteImage, imagePreviews, recipientId }) => {
   const messageContainerRef = useRef(null);
 
   //   const [getMessages, { isLoading }] = useGetMessagesQuery();
-  const { data, isLoading, refetch } = useGetMessagesQuery(id);
+  const { data, isLoading, refetch } = useGetMessagesQuery(recipientId);
 
   const { messages, fetchMsg } = useSelector((state) => state.message);
   const dispatch = useDispatch();
@@ -36,6 +36,7 @@ const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
       if (fetchMsg) {
         refetch();
         dispatch(fetchMessages(false));
+        console.log("hellofetch");
       }
     } catch (error) {
       console.log(error);
@@ -65,7 +66,6 @@ const MessageDisplay = ({ id, handleDeleteImage, imagePreviews }) => {
             .reverse()
             .map((message, index) => (
               <MessageTextItem
-                id={id}
                 recipient={message.recipient}
                 message={message}
                 key={index}

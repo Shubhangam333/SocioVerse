@@ -13,7 +13,7 @@ const ChatBox = ({ conversationId }) => {
   const [createMessage, { isLoading }] = useCreateMessageMutation();
 
   const { socket } = useSelector((state) => state.socket);
-  const { conversations } = useSelector((state) => state.message);
+  const { conversations, isRecipient } = useSelector((state) => state.message);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const ChatBox = ({ conversationId }) => {
     const formData = new FormData();
 
     formData.append("sender", profile._id);
-    formData.append("recipient", conversationId);
+    formData.append("recipient", recipient._id);
     formData.append("text", text);
 
     for (let i = 0; i < selectedImages.length; i++) {
@@ -39,7 +39,7 @@ const ChatBox = ({ conversationId }) => {
 
     const msg = {
       sender: profile._id,
-      recipient: conversationId,
+      recipient: recipient._id,
       text,
       media: mediaArray,
     };
@@ -58,7 +58,7 @@ const ChatBox = ({ conversationId }) => {
         setSelectedImages([]);
       }
     } catch (error) {
-      console.log(error);
+      console.log("er", error);
     }
   };
 
@@ -99,9 +99,13 @@ const ChatBox = ({ conversationId }) => {
   useEffect(() => {
     const convdata = conversations.find((c) => c._id === conversationId);
     if (convdata) {
-      setRecipient(convdata.recipients[1]);
+      if (isRecipient) {
+        setRecipient(convdata.recipients[0]);
+      } else {
+        setRecipient(convdata.recipients[1]);
+      }
     }
-  }, [conversationId, conversations]);
+  }, [conversationId, conversations, isRecipient]);
 
   return (
     <>
@@ -121,6 +125,7 @@ const ChatBox = ({ conversationId }) => {
             id={conversationId}
             handleDeleteImage={handleDeleteImage}
             imagePreviews={imagePreviews}
+            recipientId={recipient._id}
           />
 
           <form
