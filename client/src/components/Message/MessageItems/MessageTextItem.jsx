@@ -2,7 +2,7 @@ const MessageTextItem = ({ id, recipient, message, key }) => {
   return (
     <>
       {id === recipient ? (
-        <div className="self-start " key={key}>
+        <div className="self-start ">
           <div className="message bg-green-500 px-2  rounded-md m-2 w-fit mr-0">
             <p className="text-right"> {message.text}</p>
           </div>

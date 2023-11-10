@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BiLoader, BiSearch } from "react-icons/bi";
 import { useSearchUsersMutation } from "../../features/profile/profileapi";
 import SearchResultCard from "./SearchResultCard";
-import { useDispatch } from "react-redux";
-import { updateConversations } from "../../features/messages/messageSlice";
+
 import "./search.css";
 
 const SearchBox = ({ handleModal }) => {

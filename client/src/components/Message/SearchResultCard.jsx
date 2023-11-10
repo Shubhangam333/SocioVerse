@@ -1,11 +1,23 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { updateConversations } from "../../features/messages/messageSlice";
+import { useCreateConversationMutation } from "../../features/messages/messageapi";
+import { useState } from "react";
 
 const SearchResultCard = ({ user }) => {
   const dispatch = useDispatch();
-  const handleClick = (user) => {
-    dispatch(updateConversations(user));
+  const [createConversation] = useCreateConversationMutation();
+
+  const { profile } = useSelector((state) => state.profile);
+  const handleClick = async (user) => {
+    try {
+      const res = await createConversation({
+        recipient: user._id,
+        sender: profile._id,
+      }).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

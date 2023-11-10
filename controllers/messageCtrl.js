@@ -55,11 +55,29 @@ export const createMessage = async (req, res, next) => {
   res.status(StatusCodes.CREATED).json({ msg: "message created " });
 };
 
+export const createConversation = async (req, res, next) => {
+  const { sender, recipient } = req.body;
+  let text = "";
+  const conv = await conversation.create({
+    recipients: [sender, recipient],
+    text,
+    media: [],
+  });
+
+  if (!conv) {
+    throw new Error("There was an error in performing your request");
+  }
+
+  res.status(StatusCodes.OK).json({ conv });
+};
+
 export const getConversations = async (req, res, next) => {
   const features = new APIfeatures(
-    conversation.find({
-      recipients: req.user._id,
-    }),
+    conversation
+      .find({
+        recipients: req.user._id,
+      })
+      .populate("recipients", "name , avatar, followers , following"),
     req.query
   ).paginating();
 
@@ -115,11 +133,10 @@ export const deleteConversation = async (req, res, next) => {
     ],
   });
 
-  console.log("conv", conv);
-
-  for (let i = 0; i < conv.media.length; i++) {
-    const res = await cloudinary.uploader.destroy(conv.media[i].public_id);
-    console.log("rees", res);
+  if (conv.media) {
+    for (let i = 0; i < conv.media.length; i++) {
+      await cloudinary.uploader.destroy(conv.media[i].public_id);
+    }
   }
 
   const newConver = await conversation.findOneAndDelete({
@@ -128,8 +145,6 @@ export const deleteConversation = async (req, res, next) => {
       { recipients: [req.params.id, req.user._id] },
     ],
   });
-
-  console.log("nc", newConver);
 
   if (!newConver) {
     throw new NotFoundError("There was an error in performing your request");

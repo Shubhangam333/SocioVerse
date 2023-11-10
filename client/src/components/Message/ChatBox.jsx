@@ -4,18 +4,16 @@ import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
 import { ImAttachment } from "react-icons/im";
 
-const ChatBox = ({ id }) => {
+const ChatBox = ({ conversationId }) => {
   const [text, setText] = useState("");
-
+  const [recipient, setRecipient] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const { profile } = useSelector((state) => state.profile);
   const [createMessage, { isLoading }] = useCreateMessageMutation();
 
-  const [recipient, setRecipient] = useState(null);
   const { socket } = useSelector((state) => state.socket);
-
-  // const [loadMedia, setLoadMedia] = useState(false);
+  const { conversations } = useSelector((state) => state.message);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +22,7 @@ const ChatBox = ({ id }) => {
     const formData = new FormData();
 
     formData.append("sender", profile._id);
-    formData.append("recipient", id);
+    formData.append("recipient", conversationId);
     formData.append("text", text);
 
     for (let i = 0; i < selectedImages.length; i++) {
@@ -41,7 +39,7 @@ const ChatBox = ({ id }) => {
 
     const msg = {
       sender: profile._id,
-      recipient: id,
+      recipient: conversationId,
       text,
       media: mediaArray,
     };
@@ -99,8 +97,11 @@ const ChatBox = ({ id }) => {
   };
 
   useEffect(() => {
-    setRecipient(profile.following.filter((f) => f._id === id));
-  }, [id, profile.following]);
+    const convdata = conversations.find((c) => c._id === conversationId);
+    if (convdata) {
+      setRecipient(convdata.recipients[1]);
+    }
+  }, [conversationId, conversations]);
 
   return (
     <>
@@ -108,19 +109,16 @@ const ChatBox = ({ id }) => {
         <div className="col-span-6 relative  rounded-md">
           <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md">
             <div className="flex gap-2 items-center">
-              <img src={recipient[0].avatar.url} alt="" className="w-12" />
+              <img src={recipient.avatar.url} alt="" className="w-12" />
               <div className="flex-col ">
-                <p className="text-xl">{recipient[0].name}</p>
-                <div className="flex gap-2 text-sm text-gray-600">
-                  <span>{recipient[0].followers.length} followers</span>
-                  <span>{recipient[0].following.length} following</span>
-                </div>
+                <p className="text-xl">{recipient.name}</p>
+                <div className="flex gap-2 text-sm text-gray-600"></div>
               </div>
             </div>
           </div>
 
           <MessageDisplay
-            id={id}
+            id={conversationId}
             handleDeleteImage={handleDeleteImage}
             imagePreviews={imagePreviews}
           />

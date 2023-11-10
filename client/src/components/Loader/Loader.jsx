@@ -3,7 +3,7 @@ import "./loader.css";
 
 const Loader = () => {
   return (
-    <div className="loader fixed">
+    <div className="flex justify-center items-center loader">
       <Circles
         height="80"
         width="80"
