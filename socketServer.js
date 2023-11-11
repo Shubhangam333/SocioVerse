@@ -122,7 +122,12 @@ export const SocketServer = (socket) => {
     const user = users.find((user) => user.id === msg.recipient);
     user && socket.to(`${user.socketId}`).emit("addMessageToClient");
   });
-  //DELETE Message
+  // DELETE Message
+  socket.on("deleteMessage", (msg) => {
+    const user = users.find((user) => user.id === msg.recipient);
+    user && socket.to(`${user.socketId}`).emit("removeMessageToClient");
+  });
+  //DELETE Conversation
   socket.on("deleteConversation", (msg) => {
     const user = users.find((user) => user.id === msg.recipient);
     user && socket.to(`${user.socketId}`).emit("removeConversationToClient");

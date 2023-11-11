@@ -171,6 +171,14 @@ const SocketClient = () => {
   }, [socket, dispatch]);
 
   useEffect(() => {
+    socket.on("removeMessageToClient", () => {
+      dispatch(fetchMessages(true));
+    });
+
+    return () => socket.off("removeMessageToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
     socket.on("removeConversationToClient", () => {
       dispatch(fetchConversations(true));
       dispatch(fetchMessages(true));

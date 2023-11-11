@@ -135,5 +135,5 @@ input::-webkit-inner-spin-button {
 }
 
 .del-view {
-  left: calc(100% + 30px);
+  left: calc(100% + 20px);
 }

@@ -22,7 +22,7 @@ router.route("/create-conversation").post(isAuthenticated, createConversation);
 
 router.route("/message/:id").get(isAuthenticated, getMessages);
 
-router.route("/message/:id").put(isAuthenticated, deleteMessages);
+router.route("/message/:id").delete(isAuthenticated, deleteMessages);
 
 router.route("/conversation/:id").delete(isAuthenticated, deleteConversation);
 

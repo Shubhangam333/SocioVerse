@@ -118,6 +118,21 @@ export const getMessages = async (req, res, next) => {
   });
 };
 export const deleteMessages = async (req, res, next) => {
+  const msg = await message.findOne({
+    _id: req.params.id,
+    sender: req.user._id,
+  });
+
+  if (!msg) {
+    throw new BadRequestError("Message does not exist");
+  }
+
+  if (msg.media) {
+    for (let i = 0; i < msg.media.length; i++) {
+      await cloudinary.uploader.destroy(msg.media[i].public_id);
+    }
+  }
+
   await message.findOneAndDelete({
     _id: req.params.id,
     sender: req.user._id,

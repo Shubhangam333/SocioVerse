@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { BsThreeDots } from "react-icons/bs";
-import { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { useDeleteMessagesMutation } from "../../../features/messages/messageapi";
+import { toast } from "react-toastify";
 
 const MessageItem = ({
   recipient,
@@ -12,6 +13,22 @@ const MessageItem = ({
   setDeleteModal,
 }) => {
   const { profile } = useSelector((state) => state.profile);
+  const { socket } = useSelector((state) => state.socket);
+
+  const [deleteMessage, { isLoading }] = useDeleteMessagesMutation();
+
+  const handleDelete = async (messageId) => {
+    try {
+      const res = await deleteMessage(messageId).unwrap();
+      if (res) {
+        toast.success("Message Deleted");
+        const msg = { recipient };
+        socket.emit("deleteMessage", msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -26,11 +43,11 @@ const MessageItem = ({
               >
                 <BsThreeDots />
               </button>
-              <div className="relative ">
+              <div className="absolute  del-view rounded-md  p-4 text-red-500  ">
                 {deleteModal === message._id && (
                   <button
-                    onClick={() => setDeleteModal(null)}
-                    className="absolute del-view rounded-md  p-4 text-red-500 top-0"
+                    className=""
+                    onClick={() => handleDelete(message._id)}
                   >
                     <AiFillDelete />
                   </button>
@@ -50,17 +67,6 @@ const MessageItem = ({
         <div className="self-end ">
           <div className="message bg-red-500 px-2 rounded-md m-2  w-fit mr-0 relative">
             <p> {message.text}</p>
-            <button
-              className="absolute text-slate-500 top-1 del-btn"
-              onClick={() => toggleDeleteModal(message)}
-            >
-              <BsThreeDots />
-            </button>
-            {deleteModal === message._id && (
-              <div className="absolute bg-slate-400 text-black  p-4  bottom-8 del-view z-50">
-                <button>Delete Message</button>
-              </div>
-            )}
           </div>
 
           {message.media &&
