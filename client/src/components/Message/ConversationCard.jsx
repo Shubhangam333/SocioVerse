@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -40,7 +40,6 @@ const ConversationCard = ({ conv, setConversationId }) => {
       dispatch(setisRecipient());
       console.log("hello");
     }
-    console.log("rec", isRecipient);
   }, [conv, profile._id, isRecipient, dispatch]);
 
   return (
@@ -66,7 +65,7 @@ const ConversationCard = ({ conv, setConversationId }) => {
                     ""
                   )}
                 </h2>
-                <p>{conv.recipients[1].name} </p>
+                <p>{conv.text} </p>
               </div>
             </div>
             <button>
@@ -98,7 +97,7 @@ const ConversationCard = ({ conv, setConversationId }) => {
                       ""
                     )}
                   </h2>
-                  <p>{conv.recipients[0].name} </p>
+                  <p>{conv.text} </p>
                 </div>
               </div>
               <button>

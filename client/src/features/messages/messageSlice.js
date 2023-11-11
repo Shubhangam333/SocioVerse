@@ -7,6 +7,7 @@ const initialState = {
   fetchMsg: false,
   isRecipient: false,
   fetchConv: false,
+  deleteConv: false,
 };
 
 export const messageSlice = createSlice({
@@ -28,6 +29,9 @@ export const messageSlice = createSlice({
     setConversations: (state, action) => {
       state.conversations = action.payload;
     },
+    setDeleteConv: (state, action) => {
+      state.deleteConv = action.payload;
+    },
     updateConversations: (state, action) => {
       state.conversations = [action.payload, ...state.conversations];
     },
@@ -45,6 +49,7 @@ export const {
   fetchMessages,
   setisRecipient,
   fetchConversations,
+  setDeleteConv,
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

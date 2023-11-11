@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
 import {
   fetchConversations,
   setConversations,
+  setDeleteConv,
 } from "../../features/messages/messageSlice";
 import ConversationCard from "./ConversationCard";
 import Loader from "../Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({ setConversationId }) => {
   const { profile } = useSelector((state) => state.profile);
-  const { conversations, fetchConv } = useSelector((state) => state.message);
+  const { conversations, fetchConv, deleteConv } = useSelector(
+    (state) => state.message
+  );
 
   const { data, isLoading, refetch } = useGetConversationsQuery();
 
@@ -24,14 +28,20 @@ const SideBar = ({ setConversationId }) => {
       dispatch(setConversations(data.conversations));
     }
   }, [data, dispatch]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (fetchConv) {
       refetch();
       dispatch(fetchConversations(false));
-      console.log("hellofetch conv");
     }
   }, [refetch, dispatch, fetchConv]);
+
+  useEffect(() => {
+    if (deleteConv) {
+      dispatch(setDeleteConv(false));
+      navigate("/message");
+    }
+  }, [dispatch, deleteConv, navigate]);
 
   const handleModal = () => {
     setModalActive(!modalActive);

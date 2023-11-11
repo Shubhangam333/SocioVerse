@@ -4,7 +4,6 @@ import { useDeleteCommentPostMutation } from "../../../../features/posts/postapi
 import { useSelector } from "react-redux";
 import { useRemoveNotificationMutation } from "../../../../features/notify/notifyapi";
 import ReplyInput from "./Reply/ReplyInput";
-import CommentInput from "./CommentInput";
 
 const CommentDisplay = ({ post }) => {
   const [openComment, setOpenComment] = useState(null);
@@ -14,7 +13,7 @@ const CommentDisplay = ({ post }) => {
 
   const [onReply, setOnReply] = useState(null);
   const [comments, setComments] = useState(null);
-
+  const [isOpen, setIsOpen] = useState(null);
   const [showReplyId, setShowReplyId] = useState(null);
   const [reply, setReply] = useState(null);
 
@@ -67,15 +66,12 @@ const CommentDisplay = ({ post }) => {
   };
 
   const handleEdit = (comment) => {
-    console.log("edit");
     setisEdit(true);
   };
 
   const handleEditClose = () => {
     setisEdit(false);
   };
-
-  const [isOpen, setIsOpen] = useState(null);
 
   const toggleReply = (comment) => {
     if (isOpen === comment._id) {
@@ -94,9 +90,6 @@ const CommentDisplay = ({ post }) => {
       const reply = post && post.comments.filter((c) => c.reply === commentId);
       setReply(reply);
     }
-
-    // console.log("rep", reply);
-    // console.log("cId", commentId);
   };
 
   useEffect(() => {

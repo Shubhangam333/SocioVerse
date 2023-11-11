@@ -1,9 +1,4 @@
-import {
-  AiFillHeart,
-  AiOutlineComment,
-  AiOutlineHeart,
-  AiOutlineSave,
-} from "react-icons/ai";
+import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
 import PostImageCarousel from "./PostImageCaraousel";
 import { useState } from "react";
 import {
@@ -35,8 +30,6 @@ const PostCard = ({ post }) => {
 
   const { userInfo } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
-
-  const dispatch = useDispatch();
 
   const handleLike = async () => {
     try {

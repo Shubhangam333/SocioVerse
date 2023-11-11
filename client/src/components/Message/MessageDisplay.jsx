@@ -6,7 +6,7 @@ import {
 } from "../../features/messages/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
-import MessageTextItem from "./MessageItems/MessageTextItem";
+import MessageItem from "./MessageItems/MessageItem";
 
 const MessageDisplay = ({ handleDeleteImage, imagePreviews, recipientId }) => {
   const messageContainerRef = useRef(null);
@@ -51,10 +51,20 @@ const MessageDisplay = ({ handleDeleteImage, imagePreviews, recipientId }) => {
     scrollToBottom();
   }, [messages]);
 
+  const [deleteModal, setDeleteModal] = useState(null);
+
+  const toggleDeleteModal = (message) => {
+    if (deleteModal === message._id) {
+      setDeleteModal(null);
+    } else {
+      setDeleteModal(message._id);
+    }
+  };
+
   return (
-    <div className="message-display-container border-l-2 border-r-2 border-slate-600 h-96 overflow-y-scroll">
+    <div className="message-display-container border-l-2 border-r-2 border-slate-600 h-96 ">
       <div
-        className="flex flex-col   text-white relative justify-end "
+        className="flex flex-col   text-white relative  overflow-y-scroll "
         ref={messageContainerRef}
         style={{ height: "90%" }}
       >
@@ -65,10 +75,13 @@ const MessageDisplay = ({ handleDeleteImage, imagePreviews, recipientId }) => {
             .slice()
             .reverse()
             .map((message, index) => (
-              <MessageTextItem
+              <MessageItem
                 recipient={message.recipient}
                 message={message}
                 key={index}
+                toggleDeleteModal={toggleDeleteModal}
+                deleteModal={deleteModal}
+                setDeleteModal={setDeleteModal}
               />
             ))
         )}

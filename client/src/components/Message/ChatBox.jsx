@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
 import { ImAttachment } from "react-icons/im";
+import { fetchConversations } from "../../features/messages/messageSlice";
 
 const ChatBox = ({ conversationId }) => {
   const [text, setText] = useState("");
@@ -10,10 +11,11 @@ const ChatBox = ({ conversationId }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const { profile } = useSelector((state) => state.profile);
-  const [createMessage, { isLoading }] = useCreateMessageMutation();
+  const [createMessage] = useCreateMessageMutation();
 
   const { socket } = useSelector((state) => state.socket);
   const { conversations, isRecipient } = useSelector((state) => state.message);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +58,8 @@ const ChatBox = ({ conversationId }) => {
         setText("");
         setImagePreviews([]);
         setSelectedImages([]);
+
+        dispatch(fetchConversations(true));
       }
     } catch (error) {
       console.log("er", error);

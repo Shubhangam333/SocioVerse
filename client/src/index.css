@@ -130,3 +130,10 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
   /* Add more styles as needed */
 }
+.del-btn {
+  left: calc(100% + 8px);
+}
+
+.del-view {
+  left: calc(100% + 30px);
+}

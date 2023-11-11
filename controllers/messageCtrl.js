@@ -27,7 +27,7 @@ export const createMessage = async (req, res, next) => {
       });
     }
   }
-  console.log(mediaLinks);
+
   const newConversation = await conversation.findOneAndUpdate(
     {
       $or: [

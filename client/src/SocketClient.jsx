@@ -15,6 +15,7 @@ import {
 import {
   fetchConversations,
   fetchMessages,
+  setDeleteConv,
 } from "./features/messages/messageSlice";
 
 const spawnNotification = (body, icon, url, title) => {
@@ -173,6 +174,7 @@ const SocketClient = () => {
     socket.on("removeConversationToClient", () => {
       dispatch(fetchConversations(true));
       dispatch(fetchMessages(true));
+      dispatch(setDeleteConv(true));
       console.log("helloremove");
     });
 
