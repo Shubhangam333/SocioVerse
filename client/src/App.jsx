@@ -20,11 +20,15 @@ import MessagePage from "./pages/MessagePage";
 import Saved from "./pages/Saved";
 import { setUserInfo } from "./features/profile/profileSlice";
 import { useProfileQuery } from "./features/profile/profileapi";
+import Peer from "peerjs";
+import { setPeer } from "./features/call/callSlice";
+import CallModal from "./components/Message/CallModal";
 
 function App() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
+  const { call } = useSelector((state) => state.call);
 
   const [getNotification] = useGetNotificationMutation();
   const { data: postData, isSuccess } = useGetPostsQuery();
@@ -60,6 +64,15 @@ function App() {
     }
   }, [profileData, success, dispatch]);
 
+  useEffect(() => {
+    const newPeer = new Peer(undefined, {
+      path: "/",
+      secure: true,
+    });
+
+    dispatch(setPeer(newPeer));
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -76,6 +89,7 @@ function App() {
         </Route>
       </Routes>
       {socket && userInfo && <SocketClient />}
+      {call && <CallModal />}
     </BrowserRouter>
   );
 }

@@ -10,7 +10,7 @@ export const createMessage = async (req, res, next) => {
 
   console.log(sender, recipient, text);
 
-  if (!recipient || !text.trim()) {
+  if (!recipient) {
     throw new BadRequestError("Invalid Details");
   }
 
@@ -49,6 +49,7 @@ export const createMessage = async (req, res, next) => {
     recipient,
     text,
     media: mediaLinks,
+    call,
   });
   if (!newMessage) {
     throw new BadRequestError("There was an error in performing your request");

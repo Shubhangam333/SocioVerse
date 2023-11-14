@@ -17,6 +17,7 @@ import {
   fetchMessages,
   setDeleteConv,
 } from "./features/messages/messageSlice";
+import { setAlert, setCall } from "./features/call/callSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -188,6 +189,24 @@ const SocketClient = () => {
 
     return () => socket.off("removeConversationToClient");
   }, [socket, dispatch]);
+
+  // Call User
+  useEffect(() => {
+    socket.on("callUserToClient", (data) => {
+      dispatch(setCall(data));
+    });
+
+    return () => socket.off("callUserToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("userBusy", (data) => {
+      dispatch(setAlert(`${data.name} is busy!`));
+    });
+
+    return () => socket.off("userBusy");
+  }, [socket, dispatch]);
+
   return (
     <>
       <audio controls ref={audioRef} style={{ display: "none" }}>

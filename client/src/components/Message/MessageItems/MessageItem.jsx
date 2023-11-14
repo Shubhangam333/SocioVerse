@@ -61,6 +61,31 @@ const MessageItem = ({
                   <img src={m.url} className="rounded-md" />
                 </div>
               ))}
+
+            {message.call && (
+              <div className="bg-green-500 px-2  rounded-md m-2 cursor-pointer ">
+                {message.call.video ? (
+                  message.call.times <= 0 ? (
+                    <p>1 Video Call </p>
+                  ) : (
+                    <p>
+                      1 Video Call{" "}
+                      <span className="text-black">
+                        {" "}
+                        {message.call.times} s
+                      </span>
+                    </p>
+                  )
+                ) : message.call.times <= 0 ? (
+                  <p>1 Voice Call </p>
+                ) : (
+                  <p>
+                    1 Voice Call{" "}
+                    <span className="text-black"> {message.call.times} s</span>
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -75,6 +100,33 @@ const MessageItem = ({
                 <img src={m.url} className="rounded-md " />
               </div>
             ))}
+
+          {message.call && (
+            <div className="bg-red-500 px-2  rounded-md m-2 cursor-pointer  ">
+              {message.call.video ? (
+                message.call.times <= 0 ? (
+                  <p>1 Video Call </p>
+                ) : (
+                  <p>
+                    1 Video Call{" "}
+                    <span className="text-slate-400">
+                      {message.call.times} s
+                    </span>
+                  </p>
+                )
+              ) : message.call.times <= 0 ? (
+                <p>1 Voice Call </p>
+              ) : (
+                <p>
+                  1 Voice Call{" "}
+                  <span className="text-slate-400">
+                    {" "}
+                    {message.call.times} s
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </>

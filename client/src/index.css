@@ -137,3 +137,8 @@ input::-webkit-inner-spin-button {
 .del-view {
   left: calc(100% + 20px);
 }
+.call-modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

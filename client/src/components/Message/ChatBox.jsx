@@ -4,6 +4,9 @@ import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
 import { ImAttachment } from "react-icons/im";
 import { fetchConversations } from "../../features/messages/messageSlice";
+import { CiPhone } from "react-icons/ci";
+import { setCall } from "../../features/call/callSlice";
+import { MdOutlineVideoCall } from "react-icons/md";
 
 const ChatBox = ({ conversationId }) => {
   const [text, setText] = useState("");
@@ -14,6 +17,7 @@ const ChatBox = ({ conversationId }) => {
   const [createMessage] = useCreateMessageMutation();
 
   const { socket } = useSelector((state) => state.socket);
+  const { peer } = useSelector((state) => state.call);
   const { conversations, isRecipient } = useSelector((state) => state.message);
   const dispatch = useDispatch();
 
@@ -111,17 +115,61 @@ const ChatBox = ({ conversationId }) => {
     }
   }, [conversationId, conversations, isRecipient]);
 
+  // Call
+  const caller = ({ video }) => {
+    const msg = {
+      sender: profile._id,
+      recipient: recipient._id,
+      video,
+      avatar: recipient.avatar.url,
+      name: recipient.name,
+    };
+    dispatch(setCall(msg));
+  };
+  // console.log("rcp", recipient);
+  const callUser = ({ video }) => {
+    const msg = {
+      sender: profile._id,
+      recipient: recipient._id,
+      video,
+      avatar: profile.avatar.url,
+      name: profile.name,
+    };
+
+    if (peer.open) msg.peerId = peer._id;
+
+    socket.emit("callUser", msg);
+  };
+
+  const handleAudioCall = () => {
+    caller({ video: false });
+    callUser({ video: false });
+  };
+
+  const handleVideoCall = () => {
+    caller({ video: true });
+    callUser({ video: true });
+  };
+
   return (
     <>
       {recipient && (
         <div className="col-span-6 relative  rounded-md">
-          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md">
+          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md items-center">
             <div className="flex gap-2 items-center">
               <img src={recipient.avatar.url} alt="" className="w-12" />
               <div className="flex-col ">
                 <p className="text-xl">{recipient.name}</p>
                 <div className="flex gap-2 text-sm text-gray-600"></div>
               </div>
+            </div>
+            <div className="mx-4">
+              <button onClick={handleAudioCall}>
+                <CiPhone className="text-xl " />
+              </button>
+              <button onClick={handleVideoCall}>
+                <MdOutlineVideoCall className="text-xl " />
+              </button>
             </div>
           </div>
 
