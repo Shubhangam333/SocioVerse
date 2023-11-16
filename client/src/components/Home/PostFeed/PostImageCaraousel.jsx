@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useCallback } from "react";
 
 const PostImageCarousel = ({ images }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentImage((currentImage + 1) % images.length);
-  };
+  }, [currentImage, images.length]);
 
   const prevImage = () => {
     setCurrentImage((currentImage - 1 + images.length) % images.length);
@@ -18,7 +19,7 @@ const PostImageCarousel = ({ images }) => {
     return () => {
       clearInterval(timer);
     };
-  }, [currentImage]);
+  }, [currentImage, nextImage]);
 
   return (
     <div className="awesome-image-carousel">

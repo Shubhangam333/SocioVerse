@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { BsReply, BsThreeDots } from "react-icons/bs";
+import { useEffect, useState } from "react";
+
 import { useDeleteCommentPostMutation } from "../../../../features/posts/postapi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRemoveNotificationMutation } from "../../../../features/notify/notifyapi";
-import ReplyInput from "./Reply/ReplyInput";
+
+import CommentItem from "./CommentItem";
+import PostModal from "../PostModal/PostModal";
+import { setPostDisplay } from "../../../../features/posts/postSlice";
 
 const CommentDisplay = ({ post }) => {
-  const [openComment, setOpenComment] = useState(null);
   const [edit, setisEdit] = useState(false);
   const [deleteComment] = useDeleteCommentPostMutation();
   const { socket } = useSelector((state) => state.socket);
@@ -16,9 +18,11 @@ const CommentDisplay = ({ post }) => {
   const [isOpen, setIsOpen] = useState(null);
   const [showReplyId, setShowReplyId] = useState(null);
   const [reply, setReply] = useState(null);
+  const [openComment, setOpenComment] = useState(null);
+  const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth);
   const [removeNotify] = useRemoveNotificationMutation();
+  const [postDisplay, setPostDisplay] = useState(null);
 
   const toggleOpenComment = (commentId) => {
     if (openComment === commentId) {
@@ -85,6 +89,7 @@ const CommentDisplay = ({ post }) => {
   const showReply = (commentId) => {
     if (showReplyId === commentId) {
       setShowReplyId(null);
+      console.log("hi", showReplyId);
     } else {
       setShowReplyId(commentId);
       const reply = post && post.comments.filter((c) => c.reply === commentId);
@@ -95,96 +100,57 @@ const CommentDisplay = ({ post }) => {
   useEffect(() => {
     if (post) {
       const cms = post.comments.filter((cm) => !cm.reply);
-      setComments(cms);
+      setComments(cms.slice(0, 2));
     }
   }, [post]);
+
+  const handleAllComments = (post) => {
+    if (postDisplay === post._id) {
+      dispatch(setPostDisplay(null));
+    } else {
+      dispatch(setPostDisplay(post._id));
+    }
+  };
+
+  console.log("pd", postDisplay);
+
   return (
     <>
-      <div className="w-full px-4 my-2 flex flex-col">
+      <div className="w-full px-4 my-2 flex flex-col ">
         {comments &&
-          comments.map((comment) => (
-            <>
-              <div
-                key={comment._id}
-                className="flex border-l-2 border-red-600 my-2 relative"
-              >
-                <img
-                  src={comment && comment.user.avatar.url}
-                  alt="user profile pic"
-                  className="w-6 rounded-full"
+          comments.map(
+            (comment) =>
+              comment && (
+                <CommentItem
+                  key={comment._id}
+                  toggleOpenComment={toggleOpenComment}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                  handleEditClose={handleEditClose}
+                  toggleReply={toggleReply}
+                  showReply={showReply}
+                  edit={edit}
+                  onReply={onReply}
+                  reply={reply}
+                  comment={comment}
+                  isOpen={isOpen}
+                  showReplyId={showReplyId}
+                  post={post}
+                  openComment={openComment}
                 />
-                {!edit ? (
-                  <p>{comment.content}</p>
-                ) : (
-                  <input type="text" value={comment.content} />
-                )}
-
-                {comment.user._id === userInfo._id && (
-                  <button
-                    className="mx-2"
-                    onClick={() => toggleOpenComment(comment._id)}
-                  >
-                    <BsThreeDots />
-                  </button>
-                )}
-
-                {openComment === comment._id && (
-                  <div className="absolute bottom-0 right-12 w-20 bg-white flex gap-4 shade z-30">
-                    {!edit ? (
-                      <button
-                        className="bg-blue-400 px-2 text-white rounded-md"
-                        onClick={() => handleEdit(comment)}
-                      >
-                        Edit
-                      </button>
-                    ) : (
-                      <button
-                        className="bg-blue-400 px-2 text-white rounded-md"
-                        onClick={handleEditClose}
-                      >
-                        Cancel
-                      </button>
-                    )}
-                    <button
-                      className="bg-red-400 px-2 text-white rounded-md"
-                      onClick={() => handleDelete(comment)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-
-                <BsReply
-                  className="text-xl"
-                  onClick={() => toggleReply(comment)}
-                />
-                {isOpen === comment._id && (
-                  <ReplyInput
-                    comment={comment}
-                    isOpen={isOpen}
-                    onReply={onReply}
-                    post={post}
-                  />
-                )}
-              </div>
-              <div className="mx-4 my-2 ">
-                <button
-                  className="text-sm text-slate-600 hover:text-slate-900 hover:underline"
-                  onClick={() => showReply(comment._id)}
-                >
-                  View all replies
-                </button>
-              </div>
-
-              <div>
-                {showReplyId === comment._id && (
-                  <div>
-                    {reply && reply.map((r) => <p key={r._id}>{r.content}</p>)}
-                  </div>
-                )}
-              </div>
-            </>
-          ))}
+              )
+          )}
+        {post.comments && post.comments.length > 4 && (
+          <button
+            className="text-sm text-slate-600 hover:text-slate-900 hover:underline vallreply"
+            onClick={() => setPostDisplay(post._id)}
+          >
+            View all replies
+          </button>
+        )}
+        {postDisplay === post._id && (
+          <PostModal post={post} setPostDisplay={setPostDisplay} />
+        )}
       </div>
     </>
   );

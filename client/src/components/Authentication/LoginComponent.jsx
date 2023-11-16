@@ -20,9 +20,11 @@ const LoginComponent = () => {
         email: values.email,
         password: values.password,
       }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      toast.success("Login Successful");
-      navigate("/home");
+      if (res) {
+        dispatch(setCredentials({ ...res }));
+        toast.success("Login Successful");
+        navigate("/home");
+      }
     } catch (err) {
       console.log(err);
       toast.error(err?.data?.message || err.error || err.data.msg);

@@ -12,6 +12,10 @@ const commentSchema = new mongoose.Schema(
     user: { type: mongoose.Types.ObjectId, ref: "user" },
     postId: mongoose.Types.ObjectId,
     postUserId: mongoose.Types.ObjectId,
+    replyCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

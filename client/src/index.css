@@ -83,9 +83,6 @@ img.active {
     8px 8px 4px rgba(205, 209, 228, 0.8);
   transition: transform 0.2s; /* Optional: Add a smooth hover effect */
 }
-.card:hover {
-  transform: translateY(-2px);
-}
 
 .box-shadow {
   box-shadow: -8px -8px 4px rgba(205, 209, 228, 0.8),
@@ -141,4 +138,14 @@ input::-webkit-inner-spin-button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.post-modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  position: fixed;
+  background-color: white;
+  height: 90%;
+  overflow: scroll;
 }

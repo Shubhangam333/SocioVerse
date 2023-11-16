@@ -6,6 +6,7 @@ import { MdCallEnd, MdOutlineCall } from "react-icons/md";
 import { IoMdCall } from "react-icons/io";
 import { toast } from "react-toastify";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
+import { FcVideoCall } from "react-icons/fc";
 
 const CallModal = () => {
   const { call, peer, alertMsg } = useSelector((state) => state.call);
@@ -238,10 +239,10 @@ const CallModal = () => {
             <>
               {call.video ? (
                 <button
-                  className="material-icons text-success"
+                  className="text-green-600 text-xl"
                   onClick={handleAnswer}
                 >
-                  videocam
+                  <FcVideoCall />
                 </button>
               ) : (
                 <button onClick={handleAnswer}>

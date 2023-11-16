@@ -15,6 +15,14 @@ export const createComment = async (req, res, next) => {
     if (!cm) {
       throw new NotFoundError("This comment does not exist.");
     }
+
+    await Comment.findOneAndUpdate(
+      {
+        _id: reply,
+        user: req.user._id,
+      },
+      { replyCount: cm.replyCount + 1 }
+    );
   }
 
   const newComment = await Comment.create({
