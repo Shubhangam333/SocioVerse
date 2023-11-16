@@ -5,24 +5,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRemoveNotificationMutation } from "../../../../features/notify/notifyapi";
 
 import CommentItem from "./CommentItem";
-import PostModal from "../PostModal/PostModal";
 import { setPostDisplay } from "../../../../features/posts/postSlice";
 
 const CommentDisplay = ({ post }) => {
   const [edit, setisEdit] = useState(false);
   const [deleteComment] = useDeleteCommentPostMutation();
   const { socket } = useSelector((state) => state.socket);
-
-  const [onReply, setOnReply] = useState(null);
   const [comments, setComments] = useState(null);
+  const [onReply, setOnReply] = useState(null);
+
   const [isOpen, setIsOpen] = useState(null);
   const [showReplyId, setShowReplyId] = useState(null);
   const [reply, setReply] = useState(null);
   const [openComment, setOpenComment] = useState(null);
-  const dispatch = useDispatch();
-
+  const { postDisplay } = useSelector((state) => state.post);
   const [removeNotify] = useRemoveNotificationMutation();
-  const [postDisplay, setPostDisplay] = useState(null);
+  const dispatch = useDispatch();
 
   const toggleOpenComment = (commentId) => {
     if (openComment === commentId) {
@@ -98,21 +96,15 @@ const CommentDisplay = ({ post }) => {
   };
 
   useEffect(() => {
-    if (post) {
-      const cms = post.comments.filter((cm) => !cm.reply);
+    const cms = post.comments.filter((cm) => !cm.reply).reverse();
+    if (postDisplay === null) {
       setComments(cms.slice(0, 2));
-    }
-  }, [post]);
-
-  const handleAllComments = (post) => {
-    if (postDisplay === post._id) {
-      dispatch(setPostDisplay(null));
     } else {
-      dispatch(setPostDisplay(post._id));
+      setComments(cms);
     }
-  };
+  }, [post, postDisplay]);
 
-  console.log("pd", postDisplay);
+  // console.log("pd", postDisplay);
 
   return (
     <>
@@ -140,16 +132,13 @@ const CommentDisplay = ({ post }) => {
                 />
               )
           )}
-        {post.comments && post.comments.length > 4 && (
+        {postDisplay === null && post.comments && post.comments.length > 2 && (
           <button
             className="text-sm text-slate-600 hover:text-slate-900 hover:underline vallreply"
-            onClick={() => setPostDisplay(post._id)}
+            onClick={() => dispatch(setPostDisplay(post._id))}
           >
             View all replies
           </button>
-        )}
-        {postDisplay === post._id && (
-          <PostModal post={post} setPostDisplay={setPostDisplay} />
         )}
       </div>
     </>
