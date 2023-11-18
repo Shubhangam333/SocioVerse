@@ -33,12 +33,16 @@ const PostImageCarousel = ({ images }) => {
           />
         ))}
       </div>
-      <button onClick={prevImage} className="prev">
-        &#10094;
-      </button>
-      <button onClick={nextImage} className="next">
-        &#10095;
-      </button>
+      {images.length > 1 && (
+        <>
+          <button onClick={prevImage} className="prev">
+            &#10094;
+          </button>
+          <button onClick={nextImage} className="next">
+            &#10095;
+          </button>
+        </>
+      )}
     </div>
   );
 };

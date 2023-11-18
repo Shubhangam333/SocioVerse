@@ -174,3 +174,18 @@ export const getSavePosts = async (req, res, next) => {
     result: savePosts.length,
   });
 };
+export const deletePost = async (req, res, next) => {
+  const post = await Post.findOneAndDelete({
+    _id: req.params.id,
+    user: req.user._id,
+  });
+
+  if (!post) {
+    throw new NotFoundError("Post does not exist");
+  }
+  await Comments.deleteMany({ _id: { $in: post.comments } });
+
+  res.status(StatusCodes.OK).json({
+    msg: "Post Deleted",
+  });
+};
