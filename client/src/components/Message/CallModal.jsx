@@ -199,62 +199,64 @@ const CallModal = () => {
   }, [alertMsg, dispatch]);
 
   return (
-    <div className="bg-blue-400 text-white rounded-md fixed p-4 w-44 h-44 call-modal flex flex-col items-center">
-      <div className="flex flex-col justify-between items-center h-full">
-        <div className="text-center flex flex-col items-center gap-2">
-          <img
-            src={call.avatar}
-            className="w-6 rounded-full border-2 border-red-500 "
-          />
-          <h4 className="font-bold ">{call.name}</h4>
-          {answer ? (
-            <div>
-              <span>{hours.toString().length < 2 ? "0" + hours : hours}</span>
-              <span>:</span>
-              <span>{mins.toString().length < 2 ? "0" + mins : mins}</span>
-              <span>:</span>
-              <span>
-                {second.toString().length < 2 ? "0" + second : second}
-              </span>
-            </div>
-          ) : (
-            <div className="font-thin">
-              {call.video ? <span>Video Call</span> : <span>Voice Call</span>}
-            </div>
-          )}
-        </div>
-
-        {!answer && (
-          <div className="timer text-white font-bold">
-            <small>{mins.toString().length < 2 ? "0" + mins : mins}</small>
-            <small>:</small>
-            <small>
-              {second.toString().length < 2 ? "0" + second : second}
-            </small>
+    <div>
+      <div className="bg-blue-400 text-white rounded-md fixed p-4 call-modal flex flex-col items-center">
+        <div className="flex flex-col justify-between items-center h-full">
+          <div className="text-center flex flex-col items-center gap-2">
+            <img
+              src={call.avatar}
+              className="w-6 rounded-full border-2 border-red-500 "
+            />
+            <h4 className="font-bold ">{call.name}</h4>
+            {answer ? (
+              <div>
+                <span>{hours.toString().length < 2 ? "0" + hours : hours}</span>
+                <span>:</span>
+                <span>{mins.toString().length < 2 ? "0" + mins : mins}</span>
+                <span>:</span>
+                <span>
+                  {second.toString().length < 2 ? "0" + second : second}
+                </span>
+              </div>
+            ) : (
+              <div className="font-thin">
+                {call.video ? <span>Video Call</span> : <span>Voice Call</span>}
+              </div>
+            )}
           </div>
-        )}
 
-        <div className="flex justify-between items-center gap-6 ">
-          {call.recipient === profile._id && !answer && (
-            <>
-              {call.video ? (
-                <button
-                  className="text-green-600 text-xl"
-                  onClick={handleAnswer}
-                >
-                  <FcVideoCall />
-                </button>
-              ) : (
-                <button onClick={handleAnswer}>
-                  <IoMdCall className="text-green-600 text-xl" />
-                </button>
-              )}
-            </>
+          {!answer && (
+            <div className="timer text-white font-bold">
+              <small>{mins.toString().length < 2 ? "0" + mins : mins}</small>
+              <small>:</small>
+              <small>
+                {second.toString().length < 2 ? "0" + second : second}
+              </small>
+            </div>
           )}
 
-          <button onClick={handleEndCall}>
-            <MdCallEnd className="text-2xl text-red-500" />
-          </button>
+          <div className="flex justify-between items-center gap-6 ">
+            {call.recipient === profile._id && !answer && (
+              <>
+                {call.video ? (
+                  <button
+                    className="text-green-600 text-xl"
+                    onClick={handleAnswer}
+                  >
+                    <FcVideoCall />
+                  </button>
+                ) : (
+                  <button onClick={handleAnswer}>
+                    <IoMdCall className="text-green-600 text-xl" />
+                  </button>
+                )}
+              </>
+            )}
+
+            <button onClick={handleEndCall}>
+              <MdCallEnd className="text-2xl text-red-500" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -264,8 +266,12 @@ const CallModal = () => {
           display: answer && call.video ? "block" : "none",
         }}
       >
-        <video ref={youVideo} className="you_video" playsInline muted />
-        <video ref={otherVideo} className="other_video" playsInline />
+        <video ref={youVideo} className="user-video  w-24" playsInline muted />
+        <video
+          ref={otherVideo}
+          className="client-video flex-shrink-0 w-24"
+          playsInline
+        />
 
         <div className="time_video text-white font-bold">
           <span>{hours.toString().length < 2 ? "0" + hours : hours}</span>
@@ -275,8 +281,8 @@ const CallModal = () => {
           <span>{second.toString().length < 2 ? "0" + second : second}</span>
         </div>
 
-        <button onClick={handleEndCall}>
-          <MdCallEnd className="text-2xl text-red-500" />
+        <button onClick={handleEndCall} className="">
+          <MdCallEnd className="text-2xl text-red-500 " />
         </button>
       </div>
     </div>

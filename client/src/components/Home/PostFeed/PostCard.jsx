@@ -146,6 +146,19 @@ const PostCard = ({ post }) => {
     };
   }, [dispatch, post._id, postDisplay]);
 
+  useEffect(() => {
+    if (postDisplay) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
+
+    // Cleanup the effect on component unmount
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, [postDisplay]);
+
   const toggleReadMore = () => {
     setExpanded(!isExpanded);
   };
@@ -161,9 +174,9 @@ const PostCard = ({ post }) => {
       <div
         className={` ${
           postDisplay === post._id
-            ? "post-modal w-3/5 px-4 py-4"
+            ? "post-modal px-4 py-4"
             : "m-4 shadow-2xl border-2 border-slate-300 card"
-        }`}
+        } `}
         ref={postModal}
       >
         <div className="flex items-center border-2 border-slate-800 py-2">

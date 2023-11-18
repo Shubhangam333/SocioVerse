@@ -5,19 +5,19 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import NotificationDropDown from "../../Modal/NotificationDropDown";
 import "./header.css";
-import SearchBox from "../../Message/SearchBox";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
   return (
-    <header className="flex min-w-full bg-white justify-between py-4 px-24 items-center shadow-2xl fixed left-0 right-0 top-0 z-20">
+    <header className="flex min-w-full bg-white justify-between py-2 px-24 items-center shadow-2xl fixed left-0 right-0 top-0 z-20">
       <div>
         <Link to="/home" className="cursor-pointer">
           <h1 className="text-4xl">SocioVerse</h1>
         </Link>
       </div>
 
-      {/* <SearchBox /> */}
+      <SearchBar />
 
       <div className="flex gap-8">
         <button className="text-2xl">

@@ -101,8 +101,8 @@ export const suggestionsUser = async (req, res, next) => {
 };
 
 export const searchUsers = async (req, res, next) => {
-  if (!req.query.name) {
-    return;
+  if (req.query.name === "") {
+    res.status(StatusCodes.OK).json({});
   }
 
   const users = await User.find({

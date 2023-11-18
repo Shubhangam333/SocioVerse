@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { BiLoader, BiSearch } from "react-icons/bi";
 import { useSearchUsersMutation } from "../../features/profile/profileapi";
 import SearchResultCard from "./SearchResultCard";
-
 import "./search.css";
 
 const SearchBox = ({ handleModal, setModalActive }) => {

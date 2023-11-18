@@ -15,6 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.1s linear;
 }
 .awesome-image-carousel {
   position: relative;
@@ -140,12 +141,12 @@ input::-webkit-inner-spin-button {
   transform: translate(-50%, -50%);
 }
 .post-modal {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 200;
   position: fixed;
   background-color: white;
   height: 90%;
+  width: 60%;
   overflow: scroll;
+
+  /* transition: transform 0.2s linear; */
 }
