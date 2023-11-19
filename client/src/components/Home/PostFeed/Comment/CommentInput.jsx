@@ -62,7 +62,10 @@ const CommentInput = ({ post }) => {
   };
 
   return (
-    <form className="py-2 px-4 flex justify-between" onSubmit={handleSubmit}>
+    <form
+      className="text-lg my-2 px-4 flex justify-between"
+      onSubmit={handleSubmit}
+    >
       <input
         type="text"
         className="w-full px-2 focus:border-b-2 focus:border-slate-600 focus:outline-none  bg-slate-100 py-2"
@@ -70,7 +73,7 @@ const CommentInput = ({ post }) => {
         onChange={(e) => setContent(e.target.value)}
         value={content}
       />
-      <button className="px-2 bg-blue-500 text-white ">Post</button>
+      <button className="px-2 bg-blue-500 text-white rounded-md">Post</button>
     </form>
   );
 };

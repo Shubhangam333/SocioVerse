@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BiLoader, BiSearch } from "react-icons/bi";
 import { useSearchUsersMutation } from "../../../features/profile/profileapi";
 import SearchResultItem from "./SearchResultItem";
@@ -56,7 +56,11 @@ const SearchBar = () => {
               {data.users.length > 0 ? (
                 <div>
                   {data.users.map((u) => (
-                    <SearchResultItem key={u._id} user={u} />
+                    <SearchResultItem
+                      key={u._id}
+                      user={u}
+                      setSearch={setSearch}
+                    />
                   ))}
                 </div>
               ) : (

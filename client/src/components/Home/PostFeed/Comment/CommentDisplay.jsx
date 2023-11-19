@@ -104,8 +104,6 @@ const CommentDisplay = ({ post }) => {
     }
   }, [post, postDisplay]);
 
-  // console.log("pd", postDisplay);
-
   return (
     <>
       <div className="w-full px-4 my-2 flex flex-col ">

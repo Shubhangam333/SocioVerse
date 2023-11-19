@@ -194,11 +194,11 @@ const PostCard = ({ post }) => {
         } `}
         ref={postModal}
       >
-        <div className="flex items-center border-1 border-slate-500 py-2 justify-between ">
+        <div className="flex items-center font-medium border-1 border-slate-500 py-2 justify-between ">
           <div className="flex gap-2">
             <Link to={`/profile/${post.user._id}`}>
               <img
-                src={post.user && post.user.avatar.url}
+                src={post.user && post.user.avatar && post.user.avatar.url}
                 alt="userprofilepic"
                 className="w-6 rounded-full border-2 border-blue-500"
               />

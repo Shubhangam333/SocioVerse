@@ -23,7 +23,7 @@ const PostDisplayPage = () => {
   }, [getPostDetail]);
 
   return (
-    <div className="w-10/12 m-auto">
+    <div className="w-10/12 m-auto my-24">
       {isLoading && <Loader className="m-80" />}
       {isSuccess && <PostCard post={data.post} />}
     </div>

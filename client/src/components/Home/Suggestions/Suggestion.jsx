@@ -3,9 +3,10 @@ import { useUserSuggestionQuery } from "../../../features/profile/profileapi";
 import Loader from "../../Loader/Loader";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import PostSuggestion from "./PostSuggestion";
 
 const Suggestion = () => {
-  const { data, isLoading, isSuccess, error } = useUserSuggestionQuery();
+  const { data, isLoading, isSuccess } = useUserSuggestionQuery();
 
   const [usersuggestion, setUserSuggestion] = useState([]);
 
@@ -15,11 +16,11 @@ const Suggestion = () => {
     }
   }, [data, isSuccess]);
   return (
-    <div className="col-span-2 text-center box-shadow ">
-      <h1>User Suggestions</h1>
+    <div className="col-span-2 text-center ">
       {isLoading && <Loader />}
       {usersuggestion.length > 0 && (
-        <div className="flex flex-col w-full justify-center items-center">
+        <div className="flex flex-col w-full justify-center items-center box-shadow p-4">
+          <h1>User Suggestions</h1>
           <div className="flex  w-full  gap-2">
             <img
               src={usersuggestion[0].avatar.url}
@@ -32,6 +33,7 @@ const Suggestion = () => {
           </div>
         </div>
       )}
+      <PostSuggestion />
     </div>
   );
 };

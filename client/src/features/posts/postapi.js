@@ -84,6 +84,13 @@ export const postapi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
+    suggestedPosts: builder.query({
+      query: () => ({
+        url: "/suggestedPosts",
+        method: "GET",
+      }),
+      provideTags: ["User"],
+    }),
   }),
 });
 
@@ -99,4 +106,5 @@ export const {
   useUnSavePostMutation,
   useCreateCommentPostMutation,
   useDeleteCommentPostMutation,
+  useSuggestedPostsQuery,
 } = postapi;

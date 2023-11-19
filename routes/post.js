@@ -10,6 +10,7 @@ import {
   unlikePost,
   getPostById,
   deletePost,
+  suggestedPosts,
 } from "../controllers/postCtrl.js";
 import { isAuthenticated } from "../middlewares/authMiddleware.js";
 import { postupload } from "../config/imageupload.js";
@@ -33,5 +34,6 @@ router
 router.route("/savePost/:id").put(isAuthenticated, savePost);
 router.route("/unSavePost/:id").put(isAuthenticated, unSavePost);
 router.route("/getSavePosts").get(isAuthenticated, getSavePosts);
+router.route("/suggestedPosts").get(isAuthenticated, suggestedPosts);
 
 export default router;
