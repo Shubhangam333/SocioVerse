@@ -22,8 +22,8 @@ const LoginComponent = () => {
       }).unwrap();
       if (res) {
         dispatch(setCredentials({ ...res }));
-        toast.success("Login Successful");
         navigate("/home");
+        toast.success("Login Successful");
       }
     } catch (err) {
       console.log(err);
