@@ -26,6 +26,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
+    origin: ["https://socio-verse-client.vercel.app"], // Add the origin of your client app
+    methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   },
 });
@@ -54,7 +56,13 @@ cloudinary.config({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    origin: ["https://socio-verse-client.vercel.app"], // Add the origin of your client app
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
+  })
+);
 
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", postRoutes);
