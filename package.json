@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server.js",
-    "client": "npm run dev --prefix ../client",
-    "dev": "concurrently -k \"npm run server\" \"npm run client\""
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently -k \"npm run server\" \"npm run client\"",
+    "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build -- prefix client"
   },
   "author": "Shubhangam Saxena",
   "license": "ISC",
