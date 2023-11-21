@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://socio-verse.vercel.app",
+        target: "https://socioverseserver-jd1b.onrender.com",
         changeOrigin: true,
       },
     },
