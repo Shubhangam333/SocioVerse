@@ -12,6 +12,7 @@ import {
 } from "../../../features/notify/notifyapi";
 
 const ProfileInfo = ({ user }) => {
+  console.log("");
   const { profile } = useSelector((state) => state.profile);
   const { socket } = useSelector((state) => state.socket);
 
