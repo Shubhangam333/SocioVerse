@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 2,
   "name": "socio-verse",
   "builds": [{ "src": "server.js", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "/server.js" }],
