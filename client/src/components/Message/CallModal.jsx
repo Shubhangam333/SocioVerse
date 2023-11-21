@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RingRing from "../../audio/ringring.mp3";
 import { setAlert, setCall } from "../../features/call/callSlice";
-import { MdCallEnd, MdOutlineCall } from "react-icons/md";
+import { MdCallEnd } from "react-icons/md";
 import { IoMdCall } from "react-icons/io";
 import { toast } from "react-toastify";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
