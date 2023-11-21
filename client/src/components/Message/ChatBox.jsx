@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCreateMessageMutation } from "../../features/messages/messageapi";
 import MessageDisplay from "./MessageDisplay";
 import { ImAttachment } from "react-icons/im";
+import { fetchConversations } from "../../features/messages/messageSlice";
+import { CiPhone } from "react-icons/ci";
+import { setCall } from "../../features/call/callSlice";
+import { MdOutlineVideoCall } from "react-icons/md";
 
-const ChatBox = ({ id }) => {
+const ChatBox = ({ conversationId }) => {
   const [text, setText] = useState("");
-
+  const [recipient, setRecipient] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const { profile } = useSelector((state) => state.profile);
-  const [createMessage, { isLoading }] = useCreateMessageMutation();
+  const [createMessage] = useCreateMessageMutation();
 
-  const [recipient, setRecipient] = useState(null);
   const { socket } = useSelector((state) => state.socket);
-
-  // const [loadMedia, setLoadMedia] = useState(false);
+  const { peer } = useSelector((state) => state.call);
+  const { conversations, isRecipient } = useSelector((state) => state.message);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +28,7 @@ const ChatBox = ({ id }) => {
     const formData = new FormData();
 
     formData.append("sender", profile._id);
-    formData.append("recipient", id);
+    formData.append("recipient", recipient._id);
     formData.append("text", text);
 
     for (let i = 0; i < selectedImages.length; i++) {
@@ -41,7 +45,7 @@ const ChatBox = ({ id }) => {
 
     const msg = {
       sender: profile._id,
-      recipient: id,
+      recipient: recipient._id,
       text,
       media: mediaArray,
     };
@@ -58,9 +62,11 @@ const ChatBox = ({ id }) => {
         setText("");
         setImagePreviews([]);
         setSelectedImages([]);
+
+        dispatch(fetchConversations(true));
       }
     } catch (error) {
-      console.log(error);
+      console.log("er", error);
     }
   };
 
@@ -99,30 +105,79 @@ const ChatBox = ({ id }) => {
   };
 
   useEffect(() => {
-    setRecipient(profile.following.filter((f) => f._id === id));
-  }, [id, profile.following]);
+    const convdata = conversations.find((c) => c._id === conversationId);
+    if (convdata) {
+      if (isRecipient) {
+        setRecipient(convdata.recipients[0]);
+      } else {
+        setRecipient(convdata.recipients[1]);
+      }
+    }
+  }, [conversationId, conversations, isRecipient]);
+
+  // Call
+  const caller = ({ video }) => {
+    const msg = {
+      sender: profile._id,
+      recipient: recipient._id,
+      video,
+      avatar: recipient.avatar.url,
+      name: recipient.name,
+    };
+    dispatch(setCall(msg));
+  };
+  // console.log("rcp", recipient);
+  const callUser = ({ video }) => {
+    const msg = {
+      sender: profile._id,
+      recipient: recipient._id,
+      video,
+      avatar: profile.avatar.url,
+      name: profile.name,
+    };
+
+    if (peer.open) msg.peerId = peer._id;
+
+    socket.emit("callUser", msg);
+  };
+
+  const handleAudioCall = () => {
+    caller({ video: false });
+    callUser({ video: false });
+  };
+
+  const handleVideoCall = () => {
+    caller({ video: true });
+    callUser({ video: true });
+  };
 
   return (
     <>
       {recipient && (
         <div className="col-span-6 relative  rounded-md">
-          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md">
+          <div className="bg-white flex justify-between border-2 border-slate-600 rounded-tl-md rounded-tr-md items-center">
             <div className="flex gap-2 items-center">
-              <img src={recipient[0].avatar.url} alt="" className="w-12" />
+              <img src={recipient.avatar.url} alt="" className="w-12" />
               <div className="flex-col ">
-                <p className="text-xl">{recipient[0].name}</p>
-                <div className="flex gap-2 text-sm text-gray-600">
-                  <span>{recipient[0].followers.length} followers</span>
-                  <span>{recipient[0].following.length} following</span>
-                </div>
+                <p className="text-xl">{recipient.name}</p>
+                <div className="flex gap-2 text-sm text-gray-600"></div>
               </div>
+            </div>
+            <div className="mx-4">
+              <button onClick={handleAudioCall}>
+                <CiPhone className="text-xl " />
+              </button>
+              <button onClick={handleVideoCall}>
+                <MdOutlineVideoCall className="text-xl " />
+              </button>
             </div>
           </div>
 
           <MessageDisplay
-            id={id}
+            id={conversationId}
             handleDeleteImage={handleDeleteImage}
             imagePreviews={imagePreviews}
+            recipientId={recipient._id}
           />
 
           <form

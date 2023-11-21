@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const PostDetail = () => {
   const [isLiked, setIsLiked] = useState(false);

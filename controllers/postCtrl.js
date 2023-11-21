@@ -40,7 +40,15 @@ export const createPost = async (req, res, next) => {
 export const getPostById = async (req, res, next) => {
   const id = req.params.id;
 
-  const post = await Post.findById(id);
+  const post = await Post.findById(id)
+    .populate("user likes", "avatar name followers")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user likes",
+        select: "-password",
+      },
+    });
 
   if (!post) {
     throw new NotFoundError("Post not found");
@@ -172,5 +180,36 @@ export const getSavePosts = async (req, res, next) => {
   res.status(StatusCodes.OK).json({
     savePosts,
     result: savePosts.length,
+  });
+};
+export const deletePost = async (req, res, next) => {
+  const post = await Post.findOneAndDelete({
+    _id: req.params.id,
+    user: req.user._id,
+  });
+
+  if (!post) {
+    throw new NotFoundError("Post does not exist");
+  }
+  await Comments.deleteMany({ _id: { $in: post.comments } });
+
+  res.status(StatusCodes.OK).json({
+    msg: "Post Deleted",
+  });
+};
+
+export const suggestedPosts = async (req, res, next) => {
+  const newArr = [req.user._id, ...req.user.following];
+
+  const num = req.query.num || 10;
+
+  const posts = await Post.aggregate([
+    { $match: { user: { $nin: newArr } } },
+    { $sample: { size: Number(num) } },
+  ]);
+
+  res.status(StatusCodes.OK).json({
+    posts,
+    result: posts.length,
   });
 };

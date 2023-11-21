@@ -9,6 +9,8 @@ import {
   unSavePost,
   unlikePost,
   getPostById,
+  deletePost,
+  suggestedPosts,
 } from "../controllers/postCtrl.js";
 import { isAuthenticated } from "../middlewares/authMiddleware.js";
 import { postupload } from "../config/imageupload.js";
@@ -24,10 +26,14 @@ router.route("/post/:id").get(isAuthenticated, getPostById);
 router.route("/post/:id/like").put(isAuthenticated, likePost);
 router.route("/post/:id/unlike").put(isAuthenticated, unlikePost);
 
-router.route("/user_posts/:id").get(isAuthenticated, getUserPosts);
+router
+  .route("/user_posts/:id")
+  .get(isAuthenticated, getUserPosts)
+  .delete(isAuthenticated, deletePost);
 
 router.route("/savePost/:id").put(isAuthenticated, savePost);
 router.route("/unSavePost/:id").put(isAuthenticated, unSavePost);
 router.route("/getSavePosts").get(isAuthenticated, getSavePosts);
+router.route("/suggestedPosts").get(isAuthenticated, suggestedPosts);
 
 export default router;

@@ -12,7 +12,12 @@ import {
   setAvailableUser,
   setUnAvailableUser,
 } from "./features/status/statusSlice";
-import { fetchMessages } from "./features/messages/messageSlice";
+import {
+  fetchConversations,
+  fetchMessages,
+  setDeleteConv,
+} from "./features/messages/messageSlice";
+import { setAlert, setCall } from "./features/call/callSlice";
 
 const spawnNotification = (body, icon, url, title) => {
   let options = {
@@ -159,10 +164,49 @@ const SocketClient = () => {
   useEffect(() => {
     socket.on("addMessageToClient", () => {
       dispatch(fetchMessages(true));
+      dispatch(fetchConversations(true));
+      console.log("helloadd");
     });
 
     return () => socket.off("addMessageToClient");
   }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("removeMessageToClient", () => {
+      dispatch(fetchMessages(true));
+    });
+
+    return () => socket.off("removeMessageToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("removeConversationToClient", () => {
+      dispatch(fetchConversations(true));
+      dispatch(fetchMessages(true));
+      dispatch(setDeleteConv(true));
+      console.log("helloremove");
+    });
+
+    return () => socket.off("removeConversationToClient");
+  }, [socket, dispatch]);
+
+  // Call User
+  useEffect(() => {
+    socket.on("callUserToClient", (data) => {
+      dispatch(setCall(data));
+    });
+
+    return () => socket.off("callUserToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket.on("userBusy", (data) => {
+      dispatch(setAlert(`${data.name} is busy!`));
+    });
+
+    return () => socket.off("userBusy");
+  }, [socket, dispatch]);
+
   return (
     <>
       <audio controls ref={audioRef} style={{ display: "none" }}>

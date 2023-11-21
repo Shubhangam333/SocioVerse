@@ -8,7 +8,9 @@ import { v2 as cloudinary } from "cloudinary";
 export const createMessage = async (req, res, next) => {
   const { sender, recipient, text, call } = req.body;
 
-  if (!recipient || !text.trim()) {
+  console.log(sender, recipient, text);
+
+  if (!recipient) {
     throw new BadRequestError("Invalid Details");
   }
 
@@ -25,7 +27,7 @@ export const createMessage = async (req, res, next) => {
       });
     }
   }
-  console.log(mediaLinks);
+
   const newConversation = await conversation.findOneAndUpdate(
     {
       $or: [
@@ -47,12 +49,29 @@ export const createMessage = async (req, res, next) => {
     recipient,
     text,
     media: mediaLinks,
+    call,
   });
   if (!newMessage) {
     throw new BadRequestError("There was an error in performing your request");
   }
 
   res.status(StatusCodes.CREATED).json({ msg: "message created " });
+};
+
+export const createConversation = async (req, res, next) => {
+  const { sender, recipient } = req.body;
+  let text = "";
+  const conv = await conversation.create({
+    recipients: [sender, recipient],
+    text,
+    media: [],
+  });
+
+  if (!conv) {
+    throw new Error("There was an error in performing your request");
+  }
+
+  res.status(StatusCodes.OK).json({ conv });
 };
 
 export const getConversations = async (req, res, next) => {
@@ -65,7 +84,7 @@ export const getConversations = async (req, res, next) => {
 
   const conversations = await features.query
     .sort("-updatedAt")
-    .populate("recipients", "avatar name");
+    .populate("recipients", "avatar name followers following");
 
   if (!conversations) {
     throw new NotFoundError("There was an error in performing your request");
@@ -100,6 +119,21 @@ export const getMessages = async (req, res, next) => {
   });
 };
 export const deleteMessages = async (req, res, next) => {
+  const msg = await message.findOne({
+    _id: req.params.id,
+    sender: req.user._id,
+  });
+
+  if (!msg) {
+    throw new BadRequestError("Message does not exist");
+  }
+
+  if (msg.media) {
+    for (let i = 0; i < msg.media.length; i++) {
+      await cloudinary.uploader.destroy(msg.media[i].public_id);
+    }
+  }
+
   await message.findOneAndDelete({
     _id: req.params.id,
     sender: req.user._id,
@@ -115,11 +149,10 @@ export const deleteConversation = async (req, res, next) => {
     ],
   });
 
-  console.log("conv", conv);
-
-  for (let i = 0; i < conv.media.length; i++) {
-    const res = await cloudinary.uploader.destroy(conv.media[i].public_id);
-    console.log("rees", res);
+  if (conv.media) {
+    for (let i = 0; i < conv.media.length; i++) {
+      await cloudinary.uploader.destroy(conv.media[i].public_id);
+    }
   }
 
   const newConver = await conversation.findOneAndDelete({
@@ -128,8 +161,6 @@ export const deleteConversation = async (req, res, next) => {
       { recipients: [req.params.id, req.user._id] },
     ],
   });
-
-  console.log("nc", newConver);
 
   if (!newConver) {
     throw new NotFoundError("There was an error in performing your request");

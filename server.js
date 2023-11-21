@@ -20,6 +20,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
 import { SocketServer } from "./socketServer.js";
+import { ExpressPeerServer } from "peer";
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +33,9 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   SocketServer(socket);
 });
+
+// Create peer server
+ExpressPeerServer(http, { path: "/" });
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

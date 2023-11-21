@@ -5,6 +5,9 @@ const initialState = {
   conversations: [],
   selectedImages: [],
   fetchMsg: false,
+  isRecipient: false,
+  fetchConv: false,
+  deleteConv: false,
 };
 
 export const messageSlice = createSlice({
@@ -20,11 +23,20 @@ export const messageSlice = createSlice({
     fetchMessages: (state, action) => {
       state.fetchMsg = action.payload;
     },
+    fetchConversations: (state, action) => {
+      state.fetchConv = action.payload;
+    },
     setConversations: (state, action) => {
       state.conversations = action.payload;
     },
+    setDeleteConv: (state, action) => {
+      state.deleteConv = action.payload;
+    },
     updateConversations: (state, action) => {
       state.conversations = [action.payload, ...state.conversations];
+    },
+    setisRecipient: (state) => {
+      state.isRecipient = true;
     },
   },
 });
@@ -35,6 +47,9 @@ export const {
   setConversations,
   updateConversations,
   fetchMessages,
+  setisRecipient,
+  fetchConversations,
+  setDeleteConv,
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -10,6 +10,7 @@ import notifyReducer from "../notify/notifySlice";
 import postReducer from "../posts/postSlice";
 import statusReducer from "../status/statusSlice";
 import messageReducer from "../messages/messageSlice";
+import callReducer from "../call/callSlice";
 import { messageapi } from "../messages/messageapi";
 
 export const store = configureStore({
@@ -26,13 +27,14 @@ export const store = configureStore({
     post: postReducer,
     status: statusReducer,
     message: messageReducer,
+    call: callReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["socket/setSocket"],
-        ignoredPaths: ["socket.socket"],
+        ignoredActions: ["socket/setSocket", "call/setCall", "call/setPeer"],
+        ignoredPaths: ["socket.socket", "call.call", "call.peer"],
       },
     }).concat(
       authapi.middleware,

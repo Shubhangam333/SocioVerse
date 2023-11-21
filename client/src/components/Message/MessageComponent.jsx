@@ -16,8 +16,11 @@ const MessageComponent = () => {
   return (
     <div className="main m-auto my-24 ">
       <div className="grid grid-cols-9 msg my-8 h-96">
-        <SideBar setConversationId={setConversationId} />
-        {conversationId == id && <ChatBox id={conversationId} />}
+        <SideBar
+          setConversationId={setConversationId}
+          conversationId={conversationId}
+        />
+        {conversationId == id && <ChatBox conversationId={conversationId} />}
       </div>
     </div>
   );

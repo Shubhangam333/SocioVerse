@@ -31,16 +31,17 @@ const Gallery = ({ user }) => {
       {isSuccess &&
         data.userposts.map((post) =>
           post.images.length > 0 ? (
-            <div
-              className="w-full h-48"
-              key={post._id}
-              onClick={() => navigate(`/post/${post._id}`)}
-            >
-              <img
-                src={post.images[0].url}
-                alt=""
-                className="w-full h-full object-cover bg-center"
-              />
+            <div key={post._id} className="hover:opacity-80 cursor-pointer ">
+              <div
+                className="w-full h-48 "
+                onClick={() => navigate(`/post/${post._id}`)}
+              >
+                <img
+                  src={post.images[0].url}
+                  alt=""
+                  className="w-full h-full object-cover bg-center rounded-md"
+                />
+              </div>
             </div>
           ) : (
             <div

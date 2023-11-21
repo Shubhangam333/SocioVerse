@@ -15,6 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.1s linear;
 }
 .awesome-image-carousel {
   position: relative;
@@ -55,12 +56,13 @@ img.active {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
   font-size: 24px;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .prev {
@@ -82,9 +84,6 @@ img.active {
   box-shadow: -8px -8px 4px rgba(205, 209, 228, 0.8),
     8px 8px 4px rgba(205, 209, 228, 0.8);
   transition: transform 0.2s; /* Optional: Add a smooth hover effect */
-}
-.card:hover {
-  transform: translateY(-2px);
 }
 
 .box-shadow {
@@ -129,4 +128,26 @@ input::-webkit-inner-spin-button {
   height: 4rem; /* Adjust the height as needed */
   cursor: pointer;
   /* Add more styles as needed */
+}
+.del-btn {
+  left: calc(100% + 8px);
+}
+
+.del-view {
+  left: calc(100% + 20px);
+}
+.call-modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.post-modal {
+  z-index: 200;
+  position: fixed;
+  background-color: white;
+  height: 90%;
+  width: 60%;
+  overflow: scroll;
+
+  /* transition: transform 0.2s linear; */
 }

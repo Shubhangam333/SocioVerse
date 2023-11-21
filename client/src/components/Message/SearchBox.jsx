@@ -2,11 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { BiLoader, BiSearch } from "react-icons/bi";
 import { useSearchUsersMutation } from "../../features/profile/profileapi";
 import SearchResultCard from "./SearchResultCard";
-import { useDispatch } from "react-redux";
-import { updateConversations } from "../../features/messages/messageSlice";
 import "./search.css";
 
-const SearchBox = ({ handleModal }) => {
+const SearchBox = ({ handleModal, setModalActive }) => {
   const [search, setSearch] = useState("");
   const [searchUser, { isLoading, data }] = useSearchUsersMutation();
 
@@ -64,7 +62,11 @@ const SearchBox = ({ handleModal }) => {
           users.length > 0 && (
             <div className="results absolute top-12 left-0 right-0  w-full h-full z-20 flex flex-col gap-2">
               {users.map((u) => (
-                <SearchResultCard key={u._id} user={u} />
+                <SearchResultCard
+                  key={u._id}
+                  user={u}
+                  setModalActive={setModalActive}
+                />
               ))}
             </div>
           )

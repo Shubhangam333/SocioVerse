@@ -55,8 +55,12 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     }
     try {
       const res = await createpost(formData).unwrap();
-      toast.success("Post created");
-      console.log("res", res);
+      if (res) {
+        toast.success("Post created");
+        setPostContent("");
+        setSelectedImages([]);
+        setImagePreviews([]);
+      }
     } catch (err) {
       toast.error(err?.data?.message || err.error);
       console.log(err);

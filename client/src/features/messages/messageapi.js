@@ -21,12 +21,27 @@ export const messageapi = createApi({
       }),
       providesTags: ["Message"],
     }),
+    deleteMessages: builder.mutation({
+      query: (id) => ({
+        url: `/message/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Message"],
+    }),
     getConversations: builder.query({
       query: () => ({
         url: `/conversations`,
         method: "GET",
       }),
       providesTags: ["Conversation"],
+    }),
+    createConversation: builder.mutation({
+      query: (convdata) => ({
+        url: `/create-conversation`,
+        method: "POST",
+        body: convdata,
+      }),
+      invalidatesTags: ["Conversation"],
     }),
     deleteConversations: builder.mutation({
       query: (id) => ({
@@ -43,4 +58,6 @@ export const {
   useGetMessagesQuery,
   useGetConversationsQuery,
   useDeleteConversationsMutation,
+  useCreateConversationMutation,
+  useDeleteMessagesMutation,
 } = messageapi;

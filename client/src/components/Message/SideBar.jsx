@@ -3,15 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "./SearchBox";
 import { useGetConversationsQuery } from "../../features/messages/messageapi";
 import { useEffect, useState } from "react";
-import { setConversations } from "../../features/messages/messageSlice";
+import {
+  fetchConversations,
+  setConversations,
+  setDeleteConv,
+} from "../../features/messages/messageSlice";
 import ConversationCard from "./ConversationCard";
 import Loader from "../Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({ setConversationId }) => {
   const { profile } = useSelector((state) => state.profile);
-  const { conversations } = useSelector((state) => state.message);
+  const { conversations, fetchConv, deleteConv } = useSelector(
+    (state) => state.message
+  );
 
-  const { data, isLoading } = useGetConversationsQuery();
+  const { data, isLoading, refetch } = useGetConversationsQuery();
 
   const [modalActive, setModalActive] = useState(false);
 
@@ -21,10 +28,25 @@ const SideBar = ({ setConversationId }) => {
       dispatch(setConversations(data.conversations));
     }
   }, [data, dispatch]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (fetchConv) {
+      refetch();
+      dispatch(fetchConversations(false));
+    }
+  }, [refetch, dispatch, fetchConv]);
+
+  useEffect(() => {
+    if (deleteConv) {
+      dispatch(setDeleteConv(false));
+      navigate("/message");
+    }
+  }, [dispatch, deleteConv, navigate]);
 
   const handleModal = () => {
     setModalActive(!modalActive);
   };
+
   return (
     <div className="col-span-3 flex flex-col mr-2">
       <div className="text-slate-600 border-2 border-slate-600 p-2 rounded-md flex justify-between items-center gap-2 mb-2 ">
@@ -41,15 +63,20 @@ const SideBar = ({ setConversationId }) => {
       </div>
 
       <div className="text-slate-600 border-2 border-slate-600  rounded-md p-2 h-full">
-        {modalActive && <SearchBox handleModal={handleModal} />}
+        {modalActive && (
+          <SearchBox
+            handleModal={handleModal}
+            setModalActive={setModalActive}
+          />
+        )}
 
-        <div className="overflow-y-scroll h-full">
+        <div className="overflow-y-scroll h-96">
           {isLoading && <Loader />}
           {conversations &&
-            conversations.map((f) => (
+            conversations.map((conv) => (
               <ConversationCard
-                key={f._id}
-                f={f}
+                key={conv._id}
+                conv={conv}
                 setConversationId={setConversationId}
               />
             ))}
