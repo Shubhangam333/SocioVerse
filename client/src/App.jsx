@@ -34,7 +34,8 @@ function App() {
   const { data: postData, isSuccess } = useGetPostsQuery();
   const { data: profileData, isSuccess: success } = useProfileQuery();
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socketapi = import.meta.env.VITE_SOCKET_SERVER_API_ENDPOINT;
+    const socket = io(socketapi);
 
     dispatch(setSocket(socket));
 
