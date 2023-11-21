@@ -4,8 +4,6 @@ import PostSuggestionComponent from "./PostSuggestionComponent";
 
 const PostSuggestion = () => {
   const { data, isLoading } = useSuggestedPostsQuery();
-
-  console.log("postsugg", data);
   return (
     <div className="my-8">
       <h1>Suggested posts</h1>
