@@ -4,6 +4,7 @@ dotenv.config();
 import { connectDB } from "./config/db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import "express-async-errors";
+import path from "path";
 
 //routes
 import userRoutes from "./routes/user.js";
@@ -41,14 +42,6 @@ ExpressPeerServer(http, { path: "/" });
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
-}
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-  );
 }
 
 const port = process.env.PORT || 5000;
